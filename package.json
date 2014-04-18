@@ -1,8 +1,8 @@
 {
-  "name": "plugin-play",
-  "title": "plugin-play",
+  "name": "mlab-browser-ext",
+  "title": "mlab-browser-ext",
   "id": "jid1-BtnB7inRQuOaaQ",
-  "description": "a basic add-on",
+  "description": "A basic NDT add-on",
   "author": "",
   "license": "MPL 2.0",
   "version": "0.1"
