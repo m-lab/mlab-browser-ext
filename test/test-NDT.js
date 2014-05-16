@@ -8,6 +8,7 @@ var C2STest = require("./plugins/NDT/C2STest.js");
 var MetaTest = require("./plugins/NDT/MetaTest.js");
 var S2CTest = require("./plugins/NDT/S2CTest.js");
 var Constants = require("./plugins/NDT/Constants.js");
+var MlabNS = require("./plugins/NDT/MlabNS.js");
 
 var serverName = "ndt.iupui.mlab4.nuq0t.measurement-lab.org";
 var serverPort = 3001;
@@ -408,6 +409,16 @@ e["test S2CTestBasicTest"] = function(assert) {
 
   ndt.close();
   assert.ok(true, "S2CTestBasicTest works");
+}
+
+exports["test mlab-ns"] = function(assert) {
+  var ns = new MlabNS.MlabNS();
+
+  var result = ns.resolve();
+
+  console.info("ns result: " + result);
+
+  assert.ok(result, "mlab-ns test passed.");
 }
 
 require("sdk/test").run(exports);
