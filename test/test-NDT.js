@@ -1,37 +1,18 @@
 /* vim: set expandtab ts=2 sw=2: */
 var {components, Cc, Ci, Cr, Cu} = require("chrome");
-var Connection = require("./Connection.js");
-var Message = require("./Message.js");
-var MessageUtils = require("./MessageUtils.js");
-var NDT = require("./NDT.js");
-var C2STest = require("./C2STest.js");
-var MetaTest = require("./MetaTest.js");
-var S2CTest = require("./S2CTest.js");
-var Constants = require("./Constants.js");
+var Connection = require("./plugins/NDT/Connection.js");
+var Message = require("./plugins/NDT/Message.js");
+var MessageUtils = require("./plugins/NDT/MessageUtils.js");
+var NDT = require("./plugins/NDT/NDT.js");
+var C2STest = require("./plugins/NDT/C2STest.js");
+var MetaTest = require("./plugins/NDT/MetaTest.js");
+var S2CTest = require("./plugins/NDT/S2CTest.js");
+var Constants = require("./plugins/NDT/Constants.js");
 
-function MessageTests(connection) {
-  this.connection = connection;
-}
+var serverName = "ndt.iupui.mlab4.nuq0t.measurement-lab.org";
+var serverPort = 3001;
 
-function NDTTests(name, port) {
-  this.serverName = name;
-  this.serverPort = port;
-}
-
-function C2STests(name, port) {
-  this.serverName = name;
-  this.serverPort = port;
-}
-
-function MetaTests(name, port) {
-  this.serverName = name;
-  this.serverPort = port;
-}
-
-function S2CTests(name, port) {
-  this.serverName = name;
-  this.serverPort = port;
-}
+var e = [];
 
 function writeMessageTests(connection) {
   var testMsg = new Message.Message(1);
@@ -44,7 +25,7 @@ function writeMessageTests(connection) {
   connection.flush();
 }
 
-function TestSuiteMessageParseBytesTest() {
+exports["test SuiteMessageParseBytesTest"] = function(assert) {
   var tsMessageP = new Uint8Array(new ArrayBuffer(16));
   tsMessageP[0] = Constants.Messages.MSG_LOGIN;
   tsMessageP[1] = 0;
@@ -57,19 +38,16 @@ function TestSuiteMessageParseBytesTest() {
   var tsMessage = new Message.TestSuiteMessage();
 
   if (tsMessage.parseBytes(tsMessageP) == -1) {
-    console.error("Failed to parse tsMessageP bytes.");
-    return -1;
+    assert.ok(false, "SuiteMessageParseBytesTest failed.");
   } else if (tsMessage.type != Constants.Messages.MSG_LOGIN) {
-    console.error("Failed to set the proper type.");
-    return -1;
+    assert.ok(false, "SuiteMessageParseBytesTest failed.");
   } else if (tsMessage.value != "test") {
-    console.error("Failed to set the proper value: " + tsMessage.value + "-");
-    return -1;
+    assert.ok(false, "SuiteMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "SuiteMessageParseBytesTest passed.");
 }
 
-function KickoffMessageParseBytesTest() {
+exports["test KickoffMessageParseBytesTest"] = function(assert) {
   var koMessageP = new Uint8Array(new ArrayBuffer(13));
   koMessageP[0] = "1".charCodeAt(0);
   koMessageP[1] = "2".charCodeAt(0);
@@ -87,17 +65,15 @@ function KickoffMessageParseBytesTest() {
 
   var koMessage = new Message.KickoffMessage();
   if (koMessage.parseBytes(koMessageP) == -1) {
-    console.error("Failed to parse kickoff message bytes.");
-    return -1;
+    assert.ok(false, "KickoffMessageParseBytesTest failed.");
   }
   if (koMessage.isValidKickoffMessage() == -1) {
-    console.error("Invalid Kickoff message.");
-    return -1;
+    assert.ok(false, "KickoffMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "KickoffMessageParseBytesTest passed.");
 }
 
-function ServerVersionMessageParseBytesTest() {
+exports["test ServerVersionMessageParseBytesTest"] = function(assert) {
   var svMessageP = new Uint8Array(new ArrayBuffer(16));
   svMessageP[0] = Constants.Messages.MSG_LOGIN;
   svMessageP[1] = 0;
@@ -110,19 +86,16 @@ function ServerVersionMessageParseBytesTest() {
   var svMessage = new Message.ServerVersionMessage();
 
   if (svMessage.parseBytes(svMessageP) == -1) {
-    console.error("Failed to parse svMessageP bytes.");
-    return -1;
+    assert.ok(false, "ServerVersionMessageParseBytesTest failed.");
   } else if (svMessage.type != Constants.Messages.MSG_LOGIN) {
-    console.error("Failed to set the proper type.");
-    return -1;
+    assert.ok(false, "ServerVersionMessageParseBytesTest failed.");
   } else if (svMessage.value != "v3.6") {
-    console.error("Failed to set the proper value: " + svMessage.value + "-");
-    return -1;
+    assert.ok(false, "ServerVersionMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "ServerVersionMessageParseBytesTest passed.");
 }
 
-function SrvQMessageParseBytesTest() {
+exports["test SrvQMessageParseBytesTest"] = function(assert) {
   var svqMessageP = new Uint8Array(new ArrayBuffer(7));
   svqMessageP[0] = Constants.Messages.SRV_QUEUE;
   svqMessageP[1] = 0;
@@ -135,16 +108,14 @@ function SrvQMessageParseBytesTest() {
   var svqMessage = new Message.SrvQMessage();
 
   if (svqMessage.parseBytes(svqMessageP) == -1) {
-    console.error("Failed to parse svqMessageP bytes.");
-    return -1;
+    assert.ok(false, "SrvQMessageParseBytesTest failed.");
   } else if (svqMessage.type != Constants.Messages.SRV_QUEUE) {
-    console.error("Failed to set the proper type.");
-    return -1;
+    assert.ok(false, "SrvQMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "SrvQMessageParseBytesTest passed.");
 }
 
-function ResultsRetrievalMessageParseBytesTest() {
+exports["test ResultsRetrievalMessageParseBytesTest"] = function(assert) {
   var ResultsRetrievalMessageP = new Uint8Array(new ArrayBuffer(10));
   ResultsRetrievalMessageP[0] = Constants.Messages.MSG_RESULTS;
   ResultsRetrievalMessageP[1] = 0;
@@ -160,16 +131,14 @@ function ResultsRetrievalMessageParseBytesTest() {
   var ResultsRetrievalMessage = new Message.ResultsRetrievalMessage();
 
   if (ResultsRetrievalMessage.parseBytes(ResultsRetrievalMessageP) == -1) {
-    console.error("Failed to parse ResultsRetrievalMessageP bytes.");
-    return -1;
+    assert.ok(false, "ResultsRetrievalMessageParseBytesTest failed.");
   } else if (ResultsRetrievalMessage.type != Constants.Messages.MSG_RESULTS) {
-    console.error("Failed to set the proper type.");
-    return -1;
+    assert.ok(false, "ResultsRetrievalMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "ResultsRetrievalMessageParseBytesTest passed.");
 }
 
-function TestMsgMessageParseBytesTest() {
+exports["test MsgMessageParseBytesTest"] = function(assert) {
   var TestMsgMessageP = new Uint8Array(new ArrayBuffer(10));
   TestMsgMessageP[0] = Constants.Messages.TEST_MSG;
   TestMsgMessageP[1] = 0;
@@ -185,16 +154,14 @@ function TestMsgMessageParseBytesTest() {
   var TestMsgMessage = new Message.TestMsgMessage();
 
   if (TestMsgMessage.parseBytes(TestMsgMessageP) == -1) {
-    console.error("Failed to parse TestMsgMessageP bytes.");
-    return -1;
+    assert.ok(false, "MsgMessageParseBytesTest failed.");
   } else if (TestMsgMessage.type != Constants.Messages.TEST_MSG) {
-    console.error("Failed to set the proper type.");
-    return -1;
+    assert.ok(false, "MsgMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "MsgMessageParseBytesTest passed.");
 }
 
-function TestFinalizeMessageParseBytesTest() {
+exports["test FinalizeMessageParseBytesTest"] = function(assert) {
   var TestFinalizeMessageP = new Uint8Array(new ArrayBuffer(3));
   TestFinalizeMessageP[0] = Constants.Messages.TEST_FINALIZE;
   TestFinalizeMessageP[1] = 0;
@@ -203,16 +170,14 @@ function TestFinalizeMessageParseBytesTest() {
   var TestFinalizeMessage = new Message.TestFinalizeMessage();
 
   if (TestFinalizeMessage.parseBytes(TestFinalizeMessageP) == -1) {
-    console.error("Failed to parse TestFinalizeMessageP bytes.");
-    return -1;
+    assert.ok(false, "FinalizeMessageParseBytesTest failed.");
   } else if (TestFinalizeMessage.type != Constants.Messages.TEST_FINALIZE) {
-    console.error("Failed to set the proper type.");
-    return -1;
+    assert.ok(false, "FinalizeMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "FinalizeMessageParseBytesTest passed.");
 }
 
-function TestPrepareMessageParseBytesTest() {
+exports["test PrepareMessageParseBytesTest"] = function(assert) {
   var TestPrepareMessageP = new Uint8Array(new ArrayBuffer(7));
   TestPrepareMessageP[0] = Constants.Messages.TEST_PREPARE;
   TestPrepareMessageP[1] = 0;
@@ -225,16 +190,14 @@ function TestPrepareMessageParseBytesTest() {
   var TestPrepareMessage = new Message.TestPrepareMessage();
 
   if (TestPrepareMessage.parseBytes(TestPrepareMessageP) == -1) {
-    console.error("Failed to parse TestPrepareMessageP bytes.");
-    return -1;
+    assert.ok(false, "PrepareMessageParseBytesTest failed.");
   } else if (TestPrepareMessage.type != Constants.Messages.TEST_PREPARE) {
-    console.error("Failed to set the proper type.");
-    return -1;
+    assert.ok(false, "PrepareMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "PrepareMessageParseBytesTest passed.");
 }
 
-function TestStartMessageParseBytesTest() {
+exports["test StartMessageParseBytesTest"] = function(assert) {
   var TestStartMessageP = new Uint8Array(new ArrayBuffer(3));
   TestStartMessageP[0] = Constants.Messages.TEST_START;
   TestStartMessageP[1] = 0;
@@ -243,16 +206,14 @@ function TestStartMessageParseBytesTest() {
   var TestStartMessage = new Message.TestStartMessage();
 
   if (TestStartMessage.parseBytes(TestStartMessageP) == -1) {
-    console.error("Failed to parse TestStartMessageP bytes.");
-    return -1;
+    assert.ok(false, "StartMessageParseBytesTest failed.");
   } else if (TestStartMessage.type != Constants.Messages.TEST_START) {
-    console.error("Failed to set the proper type.");
-    return -1;
+    assert.ok(false, "StartMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "StartMessageParseBytesTest passed.");
 }
 
-function LogoutMessageParseBytesTest() {
+exports["test LogoutMessageParseBytesTest"] = function(assert) {
   var LogoutMessageP = new Uint8Array(new ArrayBuffer(3));
   LogoutMessageP[0] = Constants.Messages.MSG_LOGOUT;
   LogoutMessageP[1] = 0;
@@ -261,16 +222,14 @@ function LogoutMessageParseBytesTest() {
   var LogoutMessage = new Message.LogoutMessage();
 
   if (LogoutMessage.parseBytes(LogoutMessageP) == -1) {
-    console.error("Failed to parse LogoutMessageP bytes.");
-    return -1;
+    assert.ok(false, "LogoutMessageParseBytesTest failed.");
   } else if (LogoutMessage.type != Constants.Messages.MSG_LOGOUT) {
-    console.error("Failed to set the proper type.");
-    return -1;
+    assert.ok(false, "LogoutMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "LogoutMessageParseBytesTest passed.");
 }
 
-function ResultsMessageParseBytesTest() {
+exports["test ResultsMessageParseBytesTest"] = function(assert) {
   var ResultsMessageP = new Uint8Array(new ArrayBuffer(3));
   ResultsMessageP[0] = Constants.Messages.MSG_RESULTS;
   ResultsMessageP[1] = 0;
@@ -279,105 +238,23 @@ function ResultsMessageParseBytesTest() {
   var ResultsMessage = new Message.ResultsMessage();
 
   if (ResultsMessage.parseBytes(ResultsMessageP) == -1) {
-    console.error("Failed to parse ResultsMessageP bytes.");
-    return -1;
+    assert.ok(false, "ResultsMessageParseBytesTest failed.");
   } else if (ResultsMessage.type != Constants.Messages.MSG_RESULTS) {
-    console.error("Failed to set the proper type.");
-    return -1;
+    assert.ok(false, "ResultsMessageParseBytesTest failed.");
   }
-  return 1;
+  assert.ok(true, "ResultsMessageParseBytesTest passed.");
 }
 
-function NDTInitTest() {
+exports["test NDTInitTest"] = function(assert) {
   var ndt = new NDT.NDT();
 
-  ndt.init(this.serverName, this.serverPort);
+  ndt.init([serverName, serverPort]);
 
-  if (ndt.getServerName() != this.serverName ||
-      ndt.getServerPort() != this.serverPort) {
-    console.error("init() did not succeed!");
-    return -1;
+  if (ndt.getServerName() != serverName ||
+      ndt.getServerPort() != serverPort) {
+    assert.ok(false, "NDTInitTest failed.");
   }
-  return 1;
-}
-
-function NDTControlProtocolTest() {
-  var ndt = new NDT.NDT();
-  var success = 1;
-
-  ndt.init(this.serverName, this.serverPort);
-
-  ndt.open();
-  /*
-   * Check for kickoff message.
-   */
-  var koMessage = new Message.KickoffMessage();
-  if (koMessage.parseBytes(
-    MessageUtils.readRawBytes(ndt.getInputStream(),
-    13))
-    ) {
-    if (!koMessage.isValidKickoffMessage()) {
-      success = -1;
-    }
-  } else {
-    success = -1;
-  }
-  /*
-   * send login message and
-   * check for SRV_QUEUE response.
-   */
-  if (success == 1) {
-    var svqMessage;
-    var b;
-    var loginMsg = new Message.LoginMessage([Constants.Tests.TEST_S2C,
-      Constants.Tests.TEST_C2S,
-      Constants.Tests.TEST_MID,
-      Constants.Tests.TEST_SFW,
-      Constants.Tests.TEST_META,
-      ]);
-
-    loginMsg.write(ndt.getOutputStream());
-
-    b = MessageUtils.readRawBytesTlv(ndt.getInputStream());
-    svqMessage = new Message.SrvQMessage();
-    if (svqMessage.parseBytes(b) == -1) {
-      success = -1;
-    } else {
-      console.error("Server queue: " + svqMessage.value);
-    }
-  }
-  /*
-   * check for server version message.
-   */
-  if (success == 1) {
-    var b;
-    var svMessage = new Message.ServerVersionMessage();
-
-    b = MessageUtils.readRawBytesTlv(ndt.getInputStream());
-
-    if (svMessage.parseBytes(b) == -1) {
-      success = -1;
-    } else {
-      console.error("Server version: " + svMessage.value);
-    }
-  }
-  /*
-   * check for test suite message.
-   */
-  if (success == 1) {
-    var b;
-    var tsMessage = new Message.TestSuiteMessage();
-
-    b = MessageUtils.readRawBytesTlv(ndt.getInputStream());
-    if (tsMessage.parseBytes(b) == -1) {
-      success = -1;
-    } else {
-      console.error("Server test suite: " + tsMessage.value);
-    }
-  }
-
-  ndt.close();
-  return success;
+  assert.ok(true, "NDTInitTest passed.");
 }
 
 function InitializeNDTTestBasicTest(ndt, test) {
@@ -448,7 +325,7 @@ function InitializeNDTTestBasicTest(ndt, test) {
       console.error("Server test suite: " + tsMessage.value);
     }
   }
-  return success;
+  return 1;
 }
 
 function CompleteNDTTestBasicTest(ndt) {
@@ -468,55 +345,60 @@ function CompleteNDTTestBasicTest(ndt) {
       break;
     }
   }
+  return 1;
 }
 
-function C2STestBasicTest() {
+e["test C2STestBasicTest"] = function(assert) {
   var c2s = null;
   var ndt = new NDT.NDT();
   var success = 1;
 
-  ndt.init(this.serverName, this.serverPort);
+  ndt.init([serverName, serverPort]);
 
   if (InitializeNDTTestBasicTest(ndt, Constants.Tests.TEST_C2S) == -1) {
-    return -1;
+    assert.ok(false, "C2STestBasicTest failed.");
   }
 
   console.error("Starting to run a c2s test.");
   c2s = new C2STest.C2STest(ndt);
   c2s.runTest();
+  
+  success = CompleteNDTTestBasicTest(ndt);
 
   ndt.close();
-  return success;
+  assert.ok(success==1, "C2STestBasicTest passed.");
 }
 
-function MetaTestBasicTest() {
+e["test MetaTestBasicTest"] = function(assert) {
   var meta = null;
   var ndt = new NDT.NDT();
   var success = 1;
 
-  ndt.init(this.serverName, this.serverPort);
+  ndt.init([serverName, serverPort]);
 
   if (InitializeNDTTestBasicTest(ndt, Constants.Tests.TEST_META) == -1) {
-    return -1;
+    assert.ok(false, "MetaTestBasicTest failed.");
   }
 
   console.error("Starting to run a meta test.");
   meta = new MetaTest.MetaTest(ndt);
   meta.runTest();
 
+  success = CompleteNDTTestBasicTest(ndt);
+
   ndt.close();
-  return success;
+  assert.ok(success==1, "MetaTestBasicTest passed.");
 }
 
-function S2CTestBasicTest() {
+e["test S2CTestBasicTest"] = function(assert) {
   var s2c = null;
   var ndt = new NDT.NDT();
   var success = 1;
 
-  ndt.init(this.serverName, this.serverPort);
+  ndt.init([serverName, serverPort]);
 
   if (InitializeNDTTestBasicTest(ndt, Constants.Tests.TEST_S2C) == -1) {
-    return -1;
+    assert.ok(false, "Failed.");
   }
   console.error("Starting to run a S2C test.");
   s2c = new S2CTest.S2CTest(ndt);
@@ -525,71 +407,7 @@ function S2CTestBasicTest() {
   success = CompleteNDTTestBasicTest(ndt);
 
   ndt.close();
-  return success;
+  assert.ok(true, "S2CTestBasicTest works");
 }
 
-
-MessageTests.prototype.runTests = function () {
-  testRunner("Message tests", this, [TestSuiteMessageParseBytesTest, 
-    ServerVersionMessageParseBytesTest,
-    KickoffMessageParseBytesTest,
-    SrvQMessageParseBytesTest,
-    ResultsRetrievalMessageParseBytesTest,
-    TestMsgMessageParseBytesTest,
-    TestFinalizeMessageParseBytesTest,
-    TestPrepareMessageParseBytesTest,
-    TestStartMessageParseBytesTest,
-    LogoutMessageParseBytesTest,
-    ]);
-}
-
-NDTTests.prototype.runTests = function () {
-  return 1;
-  testRunner("NDT tests", this, [NDTControlProtocolTest,
-    ]);
-}
-
-C2STests.prototype.runTests = function () {
-  testRunner("C2S tests", this, [C2STestBasicTest,
-    ]);
-}
-
-MetaTests.prototype.runTests = function () {
-  testRunner("Meta tests", this, [MetaTestBasicTest,
-    ]);
-}
-
-S2CTests.prototype.runTests = function () {
-  testRunner("S2C tests", this, [S2CTestBasicTest,
-    ]);
-}
-
-function testRunner(testName, ths, tests) {
-  var failedTests = "";
-  var succeededTests = "";
-  var failures = 0;
-  var successes = 0;
-
-  for (i in tests) {
-    if (tests[i].call(ths) != 1) {
-      failures++;
-      if (failedTests != "") failedTests += ", ";
-      failedTests += tests[i].name;
-    } else {
-      successes++;
-      if (succeededTests != "") succeededTests += ", ";
-      succeededTests += tests[i].name;
-    }
-  }
-  console.error(testName + " results:");
-  if (failures) {
-    console.error("" + failures + " tests failed:\n" + failedTests);
-  }
-  console.error("" + successes + " tests succeeded:\n" + succeededTests);
-}
-
-exports.MessageTests = MessageTests;
-exports.NDTTests = NDTTests;
-exports.C2STests = C2STests;
-exports.MetaTests = MetaTests;
-exports.S2CTests = S2CTests;
+require("sdk/test").run(exports);
