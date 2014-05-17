@@ -246,18 +246,6 @@ exports["test ResultsMessageParseBytesTest"] = function(assert) {
   assert.ok(true, "ResultsMessageParseBytesTest passed.");
 }
 
-exports["test NDTInitTest"] = function(assert) {
-  var ndt = new NDT.NDT();
-
-  ndt.init([serverName, serverPort]);
-
-  if (ndt.getServerName() != serverName ||
-      ndt.getServerPort() != serverPort) {
-    assert.ok(false, "NDTInitTest failed.");
-  }
-  assert.ok(true, "NDTInitTest passed.");
-}
-
 function InitializeNDTTestBasicTest(ndt, test) {
   var success = 1;
 
@@ -349,68 +337,6 @@ function CompleteNDTTestBasicTest(ndt) {
   return 1;
 }
 
-e["test C2STestBasicTest"] = function(assert) {
-  var c2s = null;
-  var ndt = new NDT.NDT();
-  var success = 1;
-
-  ndt.init([serverName, serverPort]);
-
-  if (InitializeNDTTestBasicTest(ndt, Constants.Tests.TEST_C2S) == -1) {
-    assert.ok(false, "C2STestBasicTest failed.");
-  }
-
-  console.error("Starting to run a c2s test.");
-  c2s = new C2STest.C2STest(ndt);
-  c2s.runTest();
-  
-  success = CompleteNDTTestBasicTest(ndt);
-
-  ndt.close();
-  assert.ok(success==1, "C2STestBasicTest passed.");
-}
-
-e["test MetaTestBasicTest"] = function(assert) {
-  var meta = null;
-  var ndt = new NDT.NDT();
-  var success = 1;
-
-  ndt.init([serverName, serverPort]);
-
-  if (InitializeNDTTestBasicTest(ndt, Constants.Tests.TEST_META) == -1) {
-    assert.ok(false, "MetaTestBasicTest failed.");
-  }
-
-  console.error("Starting to run a meta test.");
-  meta = new MetaTest.MetaTest(ndt);
-  meta.runTest();
-
-  success = CompleteNDTTestBasicTest(ndt);
-
-  ndt.close();
-  assert.ok(success==1, "MetaTestBasicTest passed.");
-}
-
-e["test S2CTestBasicTest"] = function(assert) {
-  var s2c = null;
-  var ndt = new NDT.NDT();
-  var success = 1;
-
-  ndt.init([serverName, serverPort]);
-
-  if (InitializeNDTTestBasicTest(ndt, Constants.Tests.TEST_S2C) == -1) {
-    assert.ok(false, "Failed.");
-  }
-  console.error("Starting to run a S2C test.");
-  s2c = new S2CTest.S2CTest(ndt);
-  s2c.runTest();
-
-  success = CompleteNDTTestBasicTest(ndt);
-
-  ndt.close();
-  assert.ok(true, "S2CTestBasicTest works");
-}
-
 exports["test mlab-ns"] = function(assert) {
   var ns = new MlabNS.MlabNS();
 
@@ -419,6 +345,9 @@ exports["test mlab-ns"] = function(assert) {
   console.info("ns result: " + result);
 
   assert.ok(result, "mlab-ns test passed.");
+}
+
+exports["test timeout"] = function(assert) {
 }
 
 require("sdk/test").run(exports);
