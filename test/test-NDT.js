@@ -348,7 +348,7 @@ exports["test mlab-ns"] = function(assert) {
   assert.ok(result, "mlab-ns test passed.");
 }
 
-exports["test storage"] = function(assert) {
+exports["test get result"] = function(assert) {
   var storedResultsResults = "results";
   var storedResultsTime = Date.now();
   var storedResultsTest = "test";
@@ -363,8 +363,33 @@ exports["test storage"] = function(assert) {
     storedResultsTest, 
     storedResultsTime);
 
-  assert.ok(retrievedResults==storedResultsResults, "storage test passed.");
+  assert.ok(retrievedResults==storedResultsResults, "get result test passed.");
 }
+
+exports["test list results"] = function(assert) {
+  var storedResultsResults = ["results1", "results2"];
+  var storedResultsTime = [Date.now(), Date.now() + 5];
+  var storedResultsTest = "test1";
+  var retrievedResults = [];
+  var storage = Storage.getStorage();
+
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[0],
+    storedResultsResults[0], true);
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[1],
+    storedResultsResults[1], true);
+
+  retrievedResults = storage.listResults(storedResultsTest);
+
+  for (i in retrievedResults) {
+    if (retrievedResults[i] != storedResultsTime[i].toString()) {
+      assert.ok(false, "" + retrievedResults[i] + " != " + storedResultsTime[i].toString());
+    }
+  }
+  assert.ok(true, "list results test passed.");
+}
+
 
 exports["test timeout"] = function(assert) {
 }
