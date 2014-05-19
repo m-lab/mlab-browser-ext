@@ -9,6 +9,7 @@ var MetaTest = require("./plugins/NDT/MetaTest.js");
 var S2CTest = require("./plugins/NDT/S2CTest.js");
 var Constants = require("./plugins/NDT/Constants.js");
 var MlabNS = require("./plugins/NDT/MlabNS.js");
+var Storage = require("./storage.js");
 
 var serverName = "ndt.iupui.mlab4.nuq0t.measurement-lab.org";
 var serverPort = 3001;
@@ -345,6 +346,24 @@ exports["test mlab-ns"] = function(assert) {
   console.info("ns result: " + result);
 
   assert.ok(result, "mlab-ns test passed.");
+}
+
+exports["test storage"] = function(assert) {
+  var storedResultsResults = "results";
+  var storedResultsTime = Date.now();
+  var storedResultsTest = "test";
+  var retrievedResults = null;
+  var storage = Storage.getStorage();
+
+  storage.storeResult(storedResultsTest, 
+    storedResultsTime, 
+    storedResultsResults, true);
+
+  retrievedResults = storage.getResult(
+    storedResultsTest, 
+    storedResultsTime);
+
+  assert.ok(retrievedResults==storedResultsResults, "storage test passed.");
 }
 
 exports["test timeout"] = function(assert) {
