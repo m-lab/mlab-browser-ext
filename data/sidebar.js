@@ -2,8 +2,8 @@ function startTest(testName) {
   addon.port.emit("startTest", testName);
 }
 
-function getTestResults(testName) {
-  addon.port.emit("getTestResults", testName);
+function listTestResults(testName) {
+  addon.port.emit("listTestResults", testName);
 }
 
 function getTestResult(testName, testTime) {
@@ -29,14 +29,14 @@ addon.port.on("testDone", function (test) {
   testTime = test.time;
   testTest = test.test;
 
-  getTestResults(testTest);
+  listTestResults(testTest);
 });
 
 function closeGetTestResult(test, date) {
   return function (e) { getTestResult(test, date); };
 }
 
-addon.port.on("testResults", function (test) {
+addon.port.on("testResultsList", function (test) {
   var testResults, testTest, resultsList;
 
   /*
@@ -59,7 +59,6 @@ addon.port.on("testResults", function (test) {
     var li = document.createElement("li");
     var a = document.createElement("a");
     a.onclick = closeGetTestResult(testTest, testResults[i]);
-    a.href="";
     a.appendChild(document.createTextNode(formattedTime));
     li.appendChild(a);
     resultsList.appendChild(li);
