@@ -4,15 +4,17 @@
 <head>
   <link rel="stylesheet" type="text/css" href="sidebar.css">
   <script type='text/javascript' src="sidebar.js"></script>
+  <script type='text/javascript' src="viz/ndt.js"></script>
   <script src="http://d3js.org/d3.v3.js"></script>
 </head>
 <body onLoad="listTestResults('NDT');">
 <img src=img/m-lab-logo.png><br>
 <h1>NDT</h1>
 <a href=# onClick="startTest('NDT');">Start an NDT test</a><br>
-<ol id="NDT-ResultsList"></ol>
-<div id="MajorResultArea"></div>
+<ol id="NDT_ResultsList"></ol>
+<div id="NDT_MajorResultArea"></div>
 <br>
-<div height="500px" width="500px" id="GraphResultsArea"></div>
+<div height="500px" width="500px" id="NDT_GraphResultsArea"></div>
+</div>
 </body>
 </html>
