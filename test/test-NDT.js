@@ -390,6 +390,94 @@ exports["test list results"] = function(assert) {
   assert.ok(true, "list results test passed.");
 }
 
+exports["test get results (with no conditions)"] = function(assert) {
+  var nowNow = 1, nowThen = 10;
+  var storedResultsResults = ["results1", "results2", "results3"];
+  var storedResultsTime = [nowNow , nowNow + 2, nowThen];
+  var storedResultsTest = "test3";
+  var retrievedResults = [];
+  var storage = Storage.getStorage();
+  var resultsCounter = 0;
+
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[0],
+    storedResultsResults[0], true);
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[1],
+    storedResultsResults[1], true);
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[2],
+    storedResultsResults[2], true);
+
+  retrievedResults = storage.getResults(storedResultsTest);
+
+  for (i in retrievedResults) {
+    resultsCounter++;
+  }
+  assert.ok(resultsCounter == 3, "get results test passed.");
+}
+
+exports["test get results (with one condition)"] = function(assert) {
+  var nowNow = 1, nowThen = 10;
+  var storedResultsResults = ["results1", "results2", "results3"];
+  var storedResultsTime = [nowNow , nowNow + 2, nowThen];
+  var storedResultsTest = "test4";
+  var retrievedResults = [];
+  var storage = Storage.getStorage();
+  var resultsCounter = 0;
+
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[0],
+    storedResultsResults[0], true);
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[1],
+    storedResultsResults[1], true);
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[2],
+    storedResultsResults[2], true);
+
+  retrievedResults = storage.getResults(storedResultsTest, nowNow+3);
+
+  for (i in retrievedResults) {
+    if (retrievedResults[i].time<(nowNow+1)) {
+      assert.ok(false, "" + retrievedResults[i].time + " is outside range.");
+    }
+    resultsCounter++;
+  }
+  assert.ok(resultsCounter == 1, "get results test passed.");
+}
+
+
+exports["test get results (with two conditions)"] = function(assert) {
+  var nowNow = 1, nowThen = 10;
+  var storedResultsResults = ["results1", "results2", "results3"];
+  var storedResultsTime = [nowNow , nowNow + 2, nowThen];
+  var storedResultsTest = "test2";
+  var retrievedResults = [];
+  var storage = Storage.getStorage();
+  var resultsCounter = 0;
+
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[0],
+    storedResultsResults[0], true);
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[1],
+    storedResultsResults[1], true);
+  storage.storeResult(storedResultsTest,
+    storedResultsTime[2],
+    storedResultsResults[2], true);
+
+  retrievedResults = storage.getResults(storedResultsTest, nowNow+1, nowThen);
+
+  for (i in retrievedResults) {
+    if (retrievedResults[i].time<(nowNow+1) ||
+        retrievedResults[i].time>nowThen) {
+      assert.ok(false, "" + retrievedResults[i].time + " is outside range.");
+    }
+    resultsCounter++;
+  }
+  assert.ok(resultsCounter == 2, "get results test passed.");
+}
 
 exports["test timeout"] = function(assert) {
 }
