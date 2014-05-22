@@ -10,6 +10,8 @@ var S2CTest = require("./plugins/NDT/S2CTest.js");
 var Constants = require("./plugins/NDT/Constants.js");
 var MlabNS = require("./plugins/NDT/MlabNS.js");
 var Storage = require("./storage.js");
+var TestPrefs = require("./testprefs.js");
+var Mlab = require("./mlab.js");
 
 var serverName = "ndt.iupui.mlab4.nuq0t.measurement-lab.org";
 var serverPort = 3001;
@@ -355,12 +357,12 @@ exports["test get result"] = function(assert) {
   var retrievedResults = null;
   var storage = Storage.getStorage();
 
-  storage.storeResult(storedResultsTest, 
-    storedResultsTime, 
+  storage.storeResult(storedResultsTest,
+    storedResultsTime,
     storedResultsResults, true);
 
   retrievedResults = storage.getResult(
-    storedResultsTest, 
+    storedResultsTest,
     storedResultsTime);
 
   assert.ok(retrievedResults==storedResultsResults, "get result test passed.");
@@ -480,6 +482,66 @@ exports["test get results (with two conditions)"] = function(assert) {
 }
 
 exports["test timeout"] = function(assert) {
+}
+
+exports["test simple prefs"] = function(assert) {
+  var testPrefs = new TestPrefs.TestPrefs();
+
+  testPrefs.setPreference("test", "key", "value");
+  assert.ok(testPrefs.getPreference("test", "key") == "value",
+    testPrefs.getPreference("test", "key") + " == " + "value");
+
+  testPrefs.setPreference("test", "key2", true);
+  assert.ok(testPrefs.getPreference("test", "key2") == true,
+    testPrefs.getPreference("test", "key2") + " == " + "true");
+
+  testPrefs.setPreference("test", "key3", 9);
+  assert.ok(testPrefs.getPreference("test", "key3") == 9,
+    testPrefs.getPreference("test", "key3") + " == " + 9);
+}
+
+exports["test mlab get test prefs"] = function (assert) {
+  var mlab = new Mlab.Mlab(new Object());
+
+  console.error(mlab.getTestPreferences("NDT"));
+}
+
+exports["test mlab get/set prefs"] = function (assert) {
+  var mlab = new Mlab.Mlab(new Object());
+  mlab.setTestPreference({
+    test: "test1",
+    key: "key1",
+    value: "true",
+    type: "boolean"
+  });
+  assert.ok(mlab.getTestPreference({ test: "test1", key: "key1"}) == true,
+    "true == true");
+
+  mlab.setTestPreference({
+    test: "test1",
+    key: "key2",
+    value: "false",
+    type: "boolean"
+  });
+  assert.ok(mlab.getTestPreference({ test: "test1", key: "key2"}) == false,
+    "false == false");
+
+  mlab.setTestPreference({
+    test: "test1",
+    key: "key3",
+    value: "9",
+    type: "int"
+  });
+  assert.ok(mlab.getTestPreference({ test: "test1", key: "key3"}) == 9,
+    "9 == 9");
+  mlab.setTestPreference({
+    test: "test1",
+    key: "key4",
+    value: "string",
+    type: "string"
+  });
+  assert.ok(mlab.getTestPreference({ test: "test1", key: "key4"}) == "string",
+    "string == string");
 }
 
 require("sdk/test").run(exports);
