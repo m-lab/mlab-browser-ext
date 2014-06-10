@@ -176,7 +176,8 @@ addon.port.on("NDT.testPreferences", function (testPreferences) {
     addon.port.emit("getTestPreference", { test: "NDT",
       key: testPreferences[i].key,
       type: testPreferences[i].type,
-      description: testPreferences[i].description
+      description: testPreferences[i].description,
+      defaultValue: testPreferences[i].defaultValue
       });
   }
 });

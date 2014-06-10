@@ -33,10 +33,19 @@ function updatePreference(preferenceId) {
     var element = document.getElementById(preferenceId);
     var value;
 
-    if (type == "boolean")
+    if (type == "boolean") {
       value = element.checked ? "true" : "false";
-    else
+    } else if (type == "int") {
+      var intValue = parseInt(element.value, 10);
+      if (isNaN(intValue)) {
+        alert("Error: Expecting a number.");
+        return;
+      }
+      value = intValue;
+    }
+    else {
       value = element.value;
+    }
 
     addon.port.emit("setTestPreference", { test: test,
       type: type,
@@ -49,7 +58,9 @@ function updatePreference(preferenceId) {
 function renderPreference(renderElement, preference) {
   var prefType = preference.type;
   var prefKey = preference.key;
-  var prefValue = preference.value;
+  var prefValue = (typeof(preference.value) !== 'undefined') ?
+    preference.value :
+    preference.defaultValue;
   var prefTest = preference.test;
   var prefDescription = preference.description;
 
@@ -66,7 +77,12 @@ function renderPreference(renderElement, preference) {
   if (prefType == "boolean") {
     inputElement.type = "checkbox";
     inputElement.checked = prefValue;
-  } else if (false) {
+  } else if (prefType == "string") {
+    inputElement.type = "text";
+    inputElement.value = prefValue;
+  } else if (prefType == "int") {
+    inputElement.type = "text";
+    inputElement.value = prefValue;
   }
 
   containerElement.appendChild(labelElement);
