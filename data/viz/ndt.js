@@ -170,3 +170,17 @@ addon.port.on("NDT.testResultsList", function (test) {
     resultsList.appendChild(li);
   }
 });
+
+addon.port.on("NDT.testPreferences", function (testPreferences) {
+  for (i in testPreferences) {
+    addon.port.emit("getTestPreference", { test: "NDT",
+      key: testPreferences[i].key,
+      type: testPreferences[i].type,
+      description: testPreferences[i].description
+      });
+  }
+});
+
+addon.port.on("NDT.testPreference", function (testPreference) {
+  renderPreference(document.getElementById("NDT_PreferencesArea"), testPreference);
+});
