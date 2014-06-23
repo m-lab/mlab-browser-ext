@@ -1,5 +1,5 @@
 /* vim: set expandtab ts=2 sw=2: */
-addon.port.on("NDT.testResults", function (results) {
+self.port.on("NDT.testResults", function (results) {
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
       width = 260 - margin.left - margin.right,
       height = 200 - margin.top - margin.bottom;
@@ -23,11 +23,11 @@ addon.port.on("NDT.testResults", function (results) {
       .x(function(d) { return x(d.time); })
       .y(function(d) { return y(d.value); });
 
-  var resultGraphArea = document.getElementById("NDT_GraphResultsArea");
+  var resultGraphArea = document.getElementById("GraphResultsArea");
   while (resultGraphArea.firstChild) {
     resultGraphArea.removeChild(resultGraphArea.firstChild);
   }
-  var svg = d3.select("#NDT_GraphResultsArea").append("svg")
+  var svg = d3.select("#GraphResultsArea").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
@@ -116,20 +116,20 @@ addon.port.on("NDT.testResults", function (results) {
       .attr("d", function(d) { return line(d.values); });
 });
 
-addon.port.on("NDT.testResult", function (test) {
+self.port.on("NDT.testResult", function (test) {
   var testTest, testTime, testResults;
   testResult = test.result;
   testTest = test.test;
   testTime = test.time;
 
-  var resultArea = document.getElementById("NDT_MajorResultArea");
+  var resultArea = document.getElementById("MajorResultArea");
   while (resultArea.firstChild) {
     resultArea.removeChild(resultArea.firstChild);
   }
   resultArea.appendChild(document.createTextNode(testResult));
 });
 
-addon.port.on("NDT.testDone", function (test) {
+self.port.on("NDT.testDone", function (test) {
   var testTime, testTest;
 
   testTime = test.time;
@@ -142,7 +142,8 @@ function closeGetTestResult(test, date) {
   return function (e) { getTestResult(test, date); };
 }
 
-addon.port.on("NDT.testResultsList", function (test) {
+self.port.on("NDT.testResultsList", function (test) {
+  console.error("We are here.");
   var testResults, resultsList, testTest = "NDT";
 
   /*
@@ -154,7 +155,7 @@ addon.port.on("NDT.testResultsList", function (test) {
   });
   testTest = "NDT";
 
-  resultsList = document.getElementById("NDT_ResultsList");
+  resultsList = document.getElementById("ResultsList");
 
   while (resultsList.firstChild) {
     resultsList.removeChild(resultsList.firstChild);
@@ -171,9 +172,9 @@ addon.port.on("NDT.testResultsList", function (test) {
   }
 });
 
-addon.port.on("NDT.testPreferences", function (testPreferences) {
+self.port.on("NDT.testPreferences", function (testPreferences) {
   for (i in testPreferences) {
-    addon.port.emit("getTestPreference", { test: "NDT",
+    self.port.emit("getTestPreference", { test: "NDT",
       key: testPreferences[i].key,
       type: testPreferences[i].type,
       description: testPreferences[i].description,
@@ -182,6 +183,6 @@ addon.port.on("NDT.testPreferences", function (testPreferences) {
   }
 });
 
-addon.port.on("NDT.testPreference", function (testPreference) {
+self.port.on("NDT.testPreference", function (testPreference) {
   renderPreference(document.getElementById("NDT_PreferencesArea"), testPreference);
 });
