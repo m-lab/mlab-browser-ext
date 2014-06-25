@@ -53,16 +53,20 @@ self.port.on("NDT.testResults", function (results) {
   for (i in results.results) {
     var resultsTime = new Date(results.results[i].time);
     var resultsParsed = JSON.parse(results.results[i].results);
-    var newValue = {
-      time: resultsTime,
-      value: parseInt(resultsParsed["C2S"].throughput, 10)/1000.0
-      };
-    data[findTestIndex("C2S", data)].values.push(newValue);
-    newValue = {
-      time: resultsTime,
-      value: parseInt(resultsParsed["S2C"].throughput, 10)/1000.0
-      };
-    data[findTestIndex("S2C", data)].values.push(newValue);
+    if (resultsParsed["C2S"]) {
+      var newValue = {
+        time: resultsTime,
+        value: parseInt(resultsParsed["C2S"].throughput, 10)/1000.0
+        };
+      data[findTestIndex("C2S", data)].values.push(newValue);
+    }
+    if (resultsParsed["S2C"]) {
+      newValue = {
+        time: resultsTime,
+        value: parseInt(resultsParsed["S2C"].throughput, 10)/1000.0
+        };
+      data[findTestIndex("S2C", data)].values.push(newValue);
+    }
   }
 
   x.domain([
