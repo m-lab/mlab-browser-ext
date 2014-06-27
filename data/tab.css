@@ -1,5 +1,6 @@
 body {
   font: 10px sans-serif;
+  background-image: url('img/dotted-background.png');
 }
 
 .axis path,
@@ -17,4 +18,35 @@ body {
   fill: none;
   stroke: steelblue;
   stroke-width: 1.5px;
+}
+#InfoTextArea {
+  float: left;
+  margin: 1em;
+}
+#TestArea {
+  float: left;
+  margin: 1em;
+}
+#TestDetailArea {
+  float: left;
+  margin: 1em;
+  width: 80%;
+}
+#PreferencesArea {
+
+}
+#ResultsList {
+  float: left;
+  margin: 1em;
+
+}
+#MajorResultArea {
+  float: left;
+  margin: 1em;
+  width: 34%;
+}
+#GraphResultArea {
+  float: left;
+  margin: 1em;
+  width: 50%;
 }

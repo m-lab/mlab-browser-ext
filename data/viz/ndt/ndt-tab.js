@@ -1,8 +1,8 @@
 /* vim: set expandtab ts=2 sw=2: */
 self.port.on("NDT.testResults", function (results) {
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
-      width = 260 - margin.left - margin.right,
-      height = 200 - margin.top - margin.bottom;
+      width = 500 - margin.left - margin.right,
+      height = 350 - margin.top - margin.bottom;
 
   var x = d3.time.scale()
       .range([0, width]);
