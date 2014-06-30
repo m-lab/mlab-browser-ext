@@ -1,5 +1,5 @@
 body {
-  font: 10px sans-serif;
+  font: 14px Arial, sans-serif;
   background-image: url('img/dotted-background.png');
 }
 
@@ -19,9 +19,36 @@ body {
   stroke: steelblue;
   stroke-width: 1.5px;
 }
-#InfoTextArea {
+
+h1 {
+  font-size: 1.5em;
+}
+h2 {
+  font-size: 1.3em;
+}
+h3 {
+  font-size: 1.1em;
+}
+a:link, a:visited {
+  background: lightblue;
+  display: block;
+  padding: .5em;
+  font-weight: bold;
+  color: #999;
+} 
+a:hover, a:active {
+  background: darkblue;
+  display: block;
+  padding: .5em;
+  font-weight: bold;
+  color: #fff;
+} 
+
+
+#infoTextArea {
   float: left;
   margin: 1em;
+  width: 50%;
 }
 #TestArea {
   float: left;
