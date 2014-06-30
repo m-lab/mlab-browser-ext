@@ -29,7 +29,7 @@ h2 {
 h3 {
   font-size: 1.1em;
 }
-a:link, a:visited {
+a, a:link, a:visited {
   background: lightblue;
   display: block;
   padding: .5em;
@@ -43,7 +43,17 @@ a:hover, a:active {
   font-weight: bold;
   color: #fff;
 } 
+#logo {
+  width: 10%;
+  float: left;
+}
 
+#logo a:link, #logo a:visited {
+  background: none;
+}
+#logo a:hover, #logo a:active {
+  background: none;
+}
 
 #infoTextArea {
   float: left;
@@ -53,6 +63,7 @@ a:hover, a:active {
 #TestArea {
   float: left;
   margin: 1em;
+  width: 10%;
 }
 #TestDetailArea {
   float: left;
