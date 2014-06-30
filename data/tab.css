@@ -43,9 +43,16 @@ a:hover, a:active {
   font-weight: bold;
   color: #fff;
 } 
-#logo {
-  width: 10%;
+#container-left {
+  width: 15%;
+  min-width: 150px;
   float: left;
+}
+#container-right {
+  width: 80%;
+  float: left;
+}
+#logo {
 }
 
 #logo a:link, #logo a:visited {
@@ -58,12 +65,11 @@ a:hover, a:active {
 #infoTextArea {
   float: left;
   margin: 1em;
-  width: 50%;
+  width: 75%;
 }
 #TestArea {
   float: left;
   margin: 1em;
-  width: 10%;
 }
 #TestDetailArea {
   float: left;
