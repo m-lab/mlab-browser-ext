@@ -34,10 +34,11 @@ a, a:link, a:visited {
   display: block;
   padding: .5em;
   font-weight: bold;
-  color: #999;
+  color: #000;
 } 
 a:hover, a:active {
   background: darkblue;
+  cursor: pointer;
   display: block;
   padding: .5em;
   font-weight: bold;
@@ -70,27 +71,62 @@ a:hover, a:active {
 #TestArea {
   float: left;
   margin: 1em;
+  margin-left: 2em;
 }
 #TestDetailArea {
   float: left;
-  margin: 1em;
-  width: 80%;
+  width: 100%;
 }
 #PreferencesArea {
 
 }
+#Results {
+  position: relative;
+  z-index: 5;
+  float: right;
+}
 #ResultsList {
   float: left;
   margin: 1em;
-
+}
+#ResultsList:after {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 10;
+  right: 10;
+  height: 200px;
+  width: 200px;
+  z-index: 10;
 }
 #MajorResultArea {
-  float: left;
-  margin: 1em;
-  width: 34%;
+  position: relative;
+  top: 10px; 
+  right: 10px;
+  background: none repeat scroll 0 0 #ccc;
+  border: 2px dashed #999;
+  border-radius: 5px;
+  text-align: center;
+  z-index: 11;
 }
+/*
+  margin: 1em;
+  background: none repeat scroll 0 0 #ccc;
+  border: 2px dashed #999;
+  float: right;
+  font-size: 0.75em;
+  padding: 0.5em;
+  position: relative;
+}
+*/
 #GraphResultArea {
   float: left;
-  margin: 1em;
-  width: 50%;
+/*  width: 500px; */
 }
+#GraphResultArea svg {
+  float: left;
+}
+#GraphResultArea a {
+  font-size: .75em;
+}
+
