@@ -17,6 +17,30 @@ function openTab(tabName) {
   self.port.emit("openTab", tabName);
 }
 
+function setTestTitle(testTitle) {
+  var titleElement = document.getElementById("TestInfoAreaTitle");
+  while (titleElement.firstChild) {
+    titleElement.removeChild(titleElement.firstChild);
+  }
+  titleElement.appendChild(document.createTextNode(testTitle));
+}
+
+function setTestBody(testBody) {
+  var bodyElement = document.getElementById("TestInfoAreaBody");
+  while (bodyElement.firstChild) {
+    bodyElement.removeChild(bodyElement.firstChild);
+  }
+  bodyElement.appendChild(document.createTextNode(testBody));
+}
+
+self.port.on("testTitle", function (testTitle) {
+  setTestTitle(testTitle);
+});
+
+self.port.on("testDescription", function (testDescription) {
+  setTestBody(testDescription);
+});
+
 function updatePreference(preferenceId) {
   /*
    * We need to closure this off.
