@@ -1,5 +1,6 @@
 body {
-  font: 10px sans-serif;
+  font: 14px Arial, sans-serif;
+  background-image: url('img/dotted-background.png');
 }
 
 .axis path,
@@ -18,3 +19,114 @@ body {
   stroke: steelblue;
   stroke-width: 1.5px;
 }
+
+h1 {
+  font-size: 1.5em;
+}
+h2 {
+  font-size: 1.3em;
+}
+h3 {
+  font-size: 1.1em;
+}
+a, a:link, a:visited {
+  background: lightblue;
+  display: block;
+  padding: .5em;
+  font-weight: bold;
+  color: #000;
+} 
+a:hover, a:active {
+  background: darkblue;
+  cursor: pointer;
+  display: block;
+  padding: .5em;
+  font-weight: bold;
+  color: #fff;
+} 
+#container-left {
+  width: 15%;
+  min-width: 150px;
+  float: left;
+}
+#container-right {
+  width: 80%;
+  float: left;
+}
+#logo {
+}
+
+#logo a:link, #logo a:visited {
+  background: none;
+}
+#logo a:hover, #logo a:active {
+  background: none;
+}
+
+#infoTextArea {
+  float: left;
+  margin: 1em;
+  width: 75%;
+}
+#TestArea {
+  float: left;
+  margin: 1em;
+  margin-left: 2em;
+}
+#TestDetailArea {
+  float: left;
+  width: 100%;
+}
+#PreferencesArea {
+
+}
+#Results {
+  position: relative;
+  z-index: 5;
+  float: right;
+}
+#ResultsList {
+  float: left;
+  margin: 1em;
+}
+#ResultsList:after {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 10;
+  right: 10;
+  height: 200px;
+  width: 200px;
+  z-index: 10;
+}
+#MajorResultArea {
+  position: relative;
+  top: 10px; 
+  right: 10px;
+  background: none repeat scroll 0 0 #ccc;
+  border: 2px dashed #999;
+  border-radius: 5px;
+  text-align: center;
+  z-index: 11;
+}
+/*
+  margin: 1em;
+  background: none repeat scroll 0 0 #ccc;
+  border: 2px dashed #999;
+  float: right;
+  font-size: 0.75em;
+  padding: 0.5em;
+  position: relative;
+}
+*/
+#GraphResultArea {
+  float: left;
+/*  width: 500px; */
+}
+#GraphResultArea svg {
+  float: left;
+}
+#GraphResultArea a {
+  font-size: .75em;
+}
+
