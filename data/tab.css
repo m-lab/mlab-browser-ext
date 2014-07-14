@@ -66,8 +66,18 @@ a:hover, a:active {
 #infoTextArea {
   float: left;
   margin: 1em;
-  width: 75%;
+  width: 100%;
 }
+
+#TestInfoArea {
+  width: 100%;
+  float: left;
+}
+
+#TestInfoAreaTitle {
+  font-size: 1.5em;
+}
+
 #TestArea {
   float: left;
   margin: 1em;
@@ -87,8 +97,8 @@ a:hover, a:active {
 }
 #ResultsList {
   float: left;
-  margin: 1em;
 }
+/*
 #ResultsList:after {
   content: "";
   display: block;
@@ -99,15 +109,15 @@ a:hover, a:active {
   width: 200px;
   z-index: 10;
 }
+*/
 #MajorResultArea {
   position: relative;
-  top: 10px; 
-  right: 10px;
+  float: left;
   background: none repeat scroll 0 0 #ccc;
   border: 2px dashed #999;
   border-radius: 5px;
-  text-align: center;
-  z-index: 11;
+  max-width: 300px;
+  overflow: auto;
 }
 /*
   margin: 1em;
@@ -119,14 +129,13 @@ a:hover, a:active {
   position: relative;
 }
 */
-#GraphResultArea {
+#GraphResultsArea {
   float: left;
 /*  width: 500px; */
 }
-#GraphResultArea svg {
+#GraphResultsArea svg {
   float: left;
 }
-#GraphResultArea a {
+#GraphResultsArea a {
   font-size: .75em;
 }
-
