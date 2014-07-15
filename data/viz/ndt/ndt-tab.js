@@ -56,14 +56,14 @@ self.port.on("NDT.testResults", function (results) {
     if (resultsParsed["C2S"]) {
       var newValue = {
         time: resultsTime,
-        value: parseInt(resultsParsed["C2S"].throughput, 10)/1000.0
+        value: parseInt(resultsParsed["C2S"].throughput, 10)/1024.0
         };
       data[findTestIndex("C2S", data)].values.push(newValue);
     }
     if (resultsParsed["S2C"]) {
       newValue = {
         time: resultsTime,
-        value: parseInt(resultsParsed["S2C"].throughput, 10)/1000.0
+        value: parseInt(resultsParsed["S2C"].throughput, 10)/1024.0
         };
       data[findTestIndex("S2C", data)].values.push(newValue);
     }
@@ -121,16 +121,29 @@ self.port.on("NDT.testResults", function (results) {
 });
 
 self.port.on("NDT.testResult", function (test) {
-  var testTest, testTime, testResults;
+  var testTest, testTime, testResult, testResultParsed;
+  var upload = 0.0, download = 0.0;
   testResult = test.result;
   testTest = test.test;
   testTime = test.time;
+
+  testResultParsed = JSON.parse(testResult);
+
+  upload = parseFloat(testResultParsed["C2S"]["throughput"]) / 1024.00;
+  download = parseFloat(testResultParsed["S2C"]["cthroughput"]) / 1024.00;
+
+  upload = upload.toFixed(2);
+  download = download.toFixed(2);
 
   var resultArea = document.getElementById("MajorResultArea");
   while (resultArea.firstChild) {
     resultArea.removeChild(resultArea.firstChild);
   }
-  resultArea.appendChild(document.createTextNode(testResult));
+  resultArea.appendChild(document.createTextNode(new Date(testTime)));
+  resultArea.appendChild(document.createElement("br"));
+  resultArea.appendChild(document.createTextNode("Upload: " + upload + "Mbps"));
+  resultArea.appendChild(document.createElement("br"));
+  resultArea.appendChild(document.createTextNode("Download: " + download + "Mbps"));
 });
 
 self.port.on("NDT.testDone", function (test) {
