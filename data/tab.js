@@ -124,39 +124,57 @@ function generateRunTestClickHandler(testName) {
   }
 }
 
+function generateAccordianHandler(testName) {
+  return function () {
+    var element = document.getElementById(testName + "_PreferencesArea");
+    if (!element) return;
+    if (element.style.display == 'block') {
+      element.style.display = 'none';
+    } else {
+      element.style.display = 'block';
+    }
+  }
+}
+
 function renderTest(testName) {
   var testContainerElement, titleElement, listContainerElement,
-      preferencesElement, resultsElement, startElement;
+      preferencesElement, startElement, preferencesTitleElement,
+      actionsTitleElement;
 
   listContainerElement = document.getElementById("TestArea");
 
   testContainerElement = document.createElement('div');
   testContainerElement.id = testName;
 
-  titleElement = document.createElement('h3');
+
+  titleElement = document.createElement('h2');
+  titleElement.onclick = generateResultsClickHandler(testName);
   titleElement.appendChild(document.createTextNode(testName));
 
-  resultsElement = document.createElement('a');
-  resultsElement.onclick = generateResultsClickHandler(testName);
-  resultsElement.appendChild(document.createTextNode("Results..."));
+  actionsTitleElement = document.createElement('h4');
+  actionsTitleElement.appendChild(document.createTextNode("Actions"));
 
   startElement = document.createElement('a');
   startElement.onclick = generateRunTestClickHandler(testName);
-  startElement.appendChild(document.createTextNode("Start a test."));
+  startElement.appendChild(document.createTextNode("Start a test"));
+
+  preferencesTitleElement = document.createElement('h4');
+  preferencesTitleElement.onclick = generateAccordianHandler(testName);
+  preferencesTitleElement.appendChild(document.createTextNode("Preferences"));
 
   preferencesElement = document.createElement('div');
   preferencesElement.id = testName + "_PreferencesArea";
+  preferencesElement.className = "Preferences";
 
   testContainerElement.appendChild(titleElement);
-  testContainerElement.appendChild(document.createElement('br'));
+  testContainerElement.appendChild(preferencesTitleElement);
   testContainerElement.appendChild(preferencesElement);
-  testContainerElement.appendChild(document.createElement('br'));
+  testContainerElement.appendChild(actionsTitleElement);
   testContainerElement.appendChild(startElement);
-  testContainerElement.appendChild(document.createElement('br'));
-  testContainerElement.appendChild(resultsElement);
-  testContainerElement.appendChild(document.createElement('br'));
+
   listContainerElement.appendChild(testContainerElement);
   testContainerElement.appendChild(document.createElement('br'));
+
 
   listTestPreferences(testName);
 }

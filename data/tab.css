@@ -139,3 +139,7 @@ a:hover, a:active {
 #GraphResultsArea a {
   font-size: .75em;
 }
+
+div.Preferences {
+  display: none;
+}
