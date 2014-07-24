@@ -143,12 +143,10 @@ self.port.on("NDT.testResult", function (test) {
   upload = upload.toFixed(2);
   download = download.toFixed(2);
 
-  var resultArea = document.getElementById("MajorResultArea");
+  var resultArea = document.getElementById("result:" + testTime);
   while (resultArea.firstChild) {
     resultArea.removeChild(resultArea.firstChild);
   }
-  resultArea.appendChild(document.createTextNode(new Date(testTime)));
-  resultArea.appendChild(document.createElement("br"));
   resultArea.appendChild(document.createTextNode("Upload: " + upload + "Mbps"));
   resultArea.appendChild(document.createElement("br"));
   resultArea.appendChild(document.createTextNode("Download: " + download + "Mbps"));
@@ -162,10 +160,6 @@ self.port.on("NDT.testDone", function (test) {
 
   listTestResults(testTest);
 });
-
-function closeGetTestResult(test, date) {
-  return function (e) { getTestResult(test, date); };
-}
 
 self.port.on("NDT.testResultsList", function (test) {
   console.error("We are here.");
@@ -188,12 +182,25 @@ self.port.on("NDT.testResultsList", function (test) {
 
   for (i in testResults) {
     var formattedTime = new Date(testResults[i]);
-    var li = document.createElement("li");
-    var a = document.createElement("a");
-    a.onclick = closeGetTestResult(testTest, testResults[i]);
-    a.appendChild(document.createTextNode(formattedTime));
-    li.appendChild(a);
-    resultsList.appendChild(li);
+    var div = document.createElement("div");
+    var input = document.createElement("input");
+    var label = document.createElement("label");
+    var resultsDiv = document.createElement("div");
+
+    input.id = "input:" + testResults[i];
+    input.type = "checkbox";
+    label.htmlFor = input.id;
+
+    resultsDiv.id = "result:" + testResults[i];
+
+    label.appendChild(document.createTextNode(formattedTime));
+    div.appendChild(input);
+    div.appendChild(label);
+    div.appendChild(resultsDiv);
+
+    resultsList.appendChild(div);
+
+    getTestResult(testTest, testResults[i]);
   }
 });
 

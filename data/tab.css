@@ -143,3 +143,35 @@ a:hover, a:active {
 div.Preferences {
   display: none;
 }
+
+.results-container {
+  float: left;
+}
+
+.results-container input {
+  display: none;
+}
+
+.results-container label {
+  position: relative;
+  display: block;
+}
+
+.results-container div div {
+    background: rgba(255, 255, 255, 0.5);
+    margin-top: -1px;
+    overflow: hidden;
+    height: 0px;
+    position: relative;
+    z-index: 10;
+    transition:
+        height 0.3s ease-in-out,
+        box-shadow 0.6s linear;
+}
+.results-container div input:checked ~ div{
+    transition:
+        height 0.5s ease-in-out,
+        box-shadow 0.1s linear;
+    box-shadow: 0px 0px 0px 1px rgba(155,155,155,0.3);
+    height: 200px;
+}
