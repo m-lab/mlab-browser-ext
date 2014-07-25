@@ -1,17 +1,26 @@
-function listTestResults(testName) {
+function generateTestResults(testName, after, before, max) {
+  if (max == null) {
+    max = getMaxVisibleResults();
+  }
+
   console.error("listTestResults!");
-  self.port.emit("listTestResults", testName);
-  getTestResults(testName);
+
+  listTestResults(testName, after, before, max);
+  getTestResults(testName, after, before, max);
   getTestBody(testName);
   getTestTitle(testName);
+}
+
+function listTestResults(testName, after, before, max) {
+  self.port.emit("listTestResults", testName, after, before, max);
 }
 
 function getTestResult(testName, testTime) {
   self.port.emit("getTestResult", { test: testName, time: testTime});
 }
 
-function getTestResults(testName) {
-  self.port.emit("getTestResults", testName);
+function getTestResults(testName, after, before, max) {
+  self.port.emit("getTestResults", testName, after, before, max);
 }
 
 function getTestTitle(testName) {

@@ -158,7 +158,7 @@ self.port.on("NDT.testDone", function (test) {
   testTime = test.time;
   testTest = test.test;
 
-  listTestResults(testTest);
+  generateTestResults(testTest);
 });
 
 self.port.on("NDT.testResultsList", function (test) {

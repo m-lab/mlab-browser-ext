@@ -1,4 +1,13 @@
 /* vim: set expandtab ts=2 sw=2: */
+
+function getMaxVisibleResults() {
+  return gMaxVisibleResults;
+}
+
+function setMaxVisibleResults(newMaxVisibleResults) {
+  gMaxVisibleResults = newMaxVisibleResults;
+}
+
 function listTests() {
   self.port.emit("listTests");
 }
@@ -114,7 +123,8 @@ function renderPreference(renderElement, preference) {
 
 function generateResultsClickHandler(testName) {
   return function () {
-    listTestResults(testName);
+    setMaxVisibleResults(10);
+    generateTestResults(testName);
   };
 }
 
