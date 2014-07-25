@@ -63,15 +63,11 @@ a:hover, a:active {
   background: none;
 }
 
-#infoTextArea {
+#infoTextArea,
+#TestInfoArea {
   float: left;
   margin: 1em;
   width: 100%;
-}
-
-#TestInfoArea {
-  width: 100%;
-  float: left;
 }
 
 #TestInfoAreaTitle {
@@ -82,6 +78,10 @@ a:hover, a:active {
   float: left;
   margin: 1em;
   margin-left: 2em;
+}
+#TestArea h2:hover,
+#TestArea h4:hover {
+  cursor: pointer;
 }
 #TestDetailArea {
   float: left;
@@ -98,18 +98,6 @@ a:hover, a:active {
 #ResultsList {
   float: left;
 }
-/*
-#ResultsList:after {
-  content: "";
-  display: block;
-  position: fixed;
-  top: 10;
-  right: 10;
-  height: 200px;
-  width: 200px;
-  z-index: 10;
-}
-*/
 #MajorResultArea {
   position: relative;
   float: left;
@@ -119,16 +107,6 @@ a:hover, a:active {
   max-width: 300px;
   overflow: auto;
 }
-/*
-  margin: 1em;
-  background: none repeat scroll 0 0 #ccc;
-  border: 2px dashed #999;
-  float: right;
-  font-size: 0.75em;
-  padding: 0.5em;
-  position: relative;
-}
-*/
 #GraphResultsArea {
   float: left;
 /*  width: 500px; */
