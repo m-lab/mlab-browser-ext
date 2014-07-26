@@ -123,33 +123,44 @@ self.port.on("NDT.testResults", function (results) {
 self.port.on("NDT.testResult", function (test) {
   var testTest, testTime, testResult, testResultParsed;
   var upload = 0.0, download = 0.0;
+  var error = null;
   testResult = test.result;
   testTest = test.test;
   testTime = test.time;
 
   testResultParsed = JSON.parse(testResult);
 
-  if (parseInt(testResultParsed["S2C"]["exceptions"]) > 0) {
-    console.error("Exceptions; falling back.");
-    var downloadString = testResultParsed["S2C"]["throughput"];
-    console.error("downloadString: " + downloadString);
-    var downloadStringArray = downloadString.split(" ");
-    download = parseFloat(downloadStringArray[0]) / 1024.00;
+  if (testResultParsed["error"]) {
+    error = testResultParsed["error"];
   } else {
-    download = parseFloat(testResultParsed["S2C"]["cthroughput"]) / 1024.00;
-  }
-  upload = parseFloat(testResultParsed["C2S"]["throughput"]) / 1024.00;
+    if (parseInt(testResultParsed["S2C"]["exceptions"]) > 0) {
+      console.error("Exceptions; falling back.");
+      var downloadString = testResultParsed["S2C"]["throughput"];
+      console.error("downloadString: " + downloadString);
+      var downloadStringArray = downloadString.split(" ");
+      download = parseFloat(downloadStringArray[0]) / 1024.00;
+    } else {
+      download = parseFloat(testResultParsed["S2C"]["cthroughput"]) / 1024.00;
+    }
+    upload = parseFloat(testResultParsed["C2S"]["throughput"]) / 1024.00;
 
-  upload = upload.toFixed(2);
-  download = download.toFixed(2);
+    upload = upload.toFixed(2);
+    download = download.toFixed(2);
+  }
 
   var resultArea = document.getElementById("result:" + testTime);
   while (resultArea.firstChild) {
     resultArea.removeChild(resultArea.firstChild);
   }
-  resultArea.appendChild(document.createTextNode("Upload: " + upload + "Mbps"));
-  resultArea.appendChild(document.createElement("br"));
-  resultArea.appendChild(document.createTextNode("Download: " + download + "Mbps"));
+  if (error != null) {
+    resultArea.appendChild(document.createTextNode("Error: "+error));
+  } else {
+    resultArea.appendChild(document.createTextNode("Upload: "+upload+"Mbps"));
+    resultArea.appendChild(document.createElement("br"));
+    resultArea.appendChild(document.createTextNode("Download: " +
+      download +
+      "Mbps"));
+  }
 });
 
 self.port.on("NDT.testDone", function (test) {
