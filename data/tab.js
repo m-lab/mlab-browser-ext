@@ -22,6 +22,11 @@ function listTestPreferences(testName) {
   self.port.emit("listTestPreferences", testName);
 }
 
+function setVisibleTest(testName) {
+  console.error("Setting visible test: " + testName);
+  self.port.emit("setVisibleTest", testName);
+}
+
 function openTab(tabName) {
   self.port.emit("openTab", tabName);
 }
@@ -124,6 +129,7 @@ function renderPreference(renderElement, preference) {
 function generateResultsClickHandler(testName) {
   return function () {
     setMaxVisibleResults(10);
+    setVisibleTest(testName);
     generateTestResults(testName);
   };
 }
