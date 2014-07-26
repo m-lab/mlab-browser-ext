@@ -1,4 +1,5 @@
 /* vim: set expandtab ts=2 sw=2: */
+gMaxVisibleResults = 10;
 
 function getMaxVisibleResults() {
   return gMaxVisibleResults;
