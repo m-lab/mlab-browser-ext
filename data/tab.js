@@ -152,8 +152,9 @@ function renderTest(testName) {
   titleElement.appendChild(document.createTextNode(testName));
 
   actionsTitleElement = document.createElement('h3');
+/*
   actionsTitleElement.appendChild(document.createTextNode("Actions:"));
-
+*/
   startElement = document.createElement('a');
   startElement.onclick = generateRunTestClickHandler(testName);
   startElement.appendChild(document.createTextNode("Start a test"));

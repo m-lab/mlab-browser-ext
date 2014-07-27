@@ -81,9 +81,21 @@ a:hover, a:active {
   margin: 1em;
   margin-left: 2em;
 }
+#TestArea a:link, 
+#TestArea a:visited, 
+#TestArea a:hover, 
+#TestArea a:active, 
+  margin-left: .5em;
+}
+#TestArea h2 {
+  display: block;
+  padding: .5em;
+}
 #TestArea h2:hover,
 #TestArea h4:hover {
   cursor: pointer;
+  color: white;
+  background: darkblue;
 }
 #TestDetailArea {
   float: left;
@@ -99,6 +111,13 @@ a:hover, a:active {
 }
 #ResultsList {
   float: left;
+}
+div .testResultHeading:hover {
+  font-weight: bold;
+  color: darkblue;
+  cursor: pointer;
+}
+.testResultHeading {
 }
 #MajorResultArea {
   position: relative;
@@ -153,5 +172,5 @@ div.Preferences {
         height 0.5s ease-in-out,
         box-shadow 0.1s linear;
     box-shadow: 0px 0px 0px 1px rgba(155,155,155,0.3);
-    height: 200px;
+    height: 2.5em;
 }

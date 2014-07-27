@@ -187,11 +187,14 @@ self.port.on("NDT.testResultsList", function (test) {
     var label = document.createElement("label");
     var resultsDiv = document.createElement("div");
 
+    div.className = "testResultHeading";
+
     input.id = "input:" + testResults[i];
     input.type = "checkbox";
     label.htmlFor = input.id;
 
     resultsDiv.id = "result:" + testResults[i];
+    resultsDiv.className = "testresult";
 
     label.appendChild(document.createTextNode(formattedTime));
     div.appendChild(input);
