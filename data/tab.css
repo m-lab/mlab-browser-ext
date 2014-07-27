@@ -117,6 +117,11 @@ div .testResultHeading:hover {
   color: darkblue;
   cursor: pointer;
 }
+.testresult {
+  font-style: italic;
+  padding-left: 1em;
+  border: #999;
+}
 .testResultHeading {
 }
 #MajorResultArea {
