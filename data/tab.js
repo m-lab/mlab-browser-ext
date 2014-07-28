@@ -168,14 +168,15 @@ function renderTest(testName) {
   titleElement.onclick = generateResultsClickHandler(testName);
   titleElement.appendChild(document.createTextNode(testName));
 
-  actionsTitleElement = document.createElement('h4');
-  actionsTitleElement.appendChild(document.createTextNode("Actions"));
-
+  actionsTitleElement = document.createElement('h3');
+/*
+  actionsTitleElement.appendChild(document.createTextNode("Actions:"));
+*/
   startElement = document.createElement('a');
   startElement.onclick = generateRunTestClickHandler(testName);
   startElement.appendChild(document.createTextNode("Start a test"));
 
-  preferencesTitleElement = document.createElement('h4');
+  preferencesTitleElement = document.createElement('a');
   preferencesTitleElement.onclick = generateAccordianHandler(testName);
   preferencesTitleElement.appendChild(document.createTextNode("Preferences"));
 
