@@ -150,6 +150,7 @@ div.Preferences {
 
 .results-container {
   float: left;
+  width: 400px;
 }
 
 .results-container input {
@@ -162,10 +163,12 @@ div.Preferences {
 }
 
 .results-container div div {
-    background: rgba(255, 255, 255, 0.5);
+    background: none repeat scroll 0 0;
+    background-color: rgba(157, 157, 157, 0.3);
     margin-top: -1px;
     overflow: hidden;
     height: 0px;
+    width: 0px;
     position: relative;
     z-index: 10;
     transition:
@@ -176,6 +179,10 @@ div.Preferences {
     transition:
         height 0.5s ease-in-out,
         box-shadow 0.1s linear;
-    box-shadow: 0px 0px 0px 1px rgba(155,155,155,0.3);
+    box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.3);
     height: 2.5em;
+    width: 100%;
+    overflow: auto;
+    background: none repeat scroll 0 0;
+    background-color: rgba(157, 157, 157, 0.3);
 }
