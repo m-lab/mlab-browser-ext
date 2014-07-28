@@ -19,7 +19,7 @@ function startTest(testName) {
 }
 
 function listTestPreferences(testName) {
-  console.error("listTestPreferendces.");
+  console.error("listTestPreferences.");
   self.port.emit("listTestPreferences", testName);
 }
 
