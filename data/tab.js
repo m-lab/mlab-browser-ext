@@ -166,6 +166,7 @@ function renderTest(testName) {
 
   titleElement = document.createElement('h2');
   titleElement.onclick = generateResultsClickHandler(testName);
+  titleElement.id = "TabTitle:" + testName;
   titleElement.appendChild(document.createTextNode(testName));
 
   actionsTitleElement = document.createElement('h3');
@@ -207,6 +208,18 @@ self.port.on("tests", function (tests) {
 self.port.on("initialize", function () {
   console.error("initialize");
   listTests();
+});
+
+self.port.on("testStarted", function (test) {
+  var element = document.getElementById("TabTitle:" + test);
+  if (!element) { return; }
+  element.classList.add("tabTitleActive");
+});
+
+self.port.on("testStopped", function (test) {
+  var element = document.getElementById("TabTitle:" + test);
+  if (!element) { return; }
+  element.classList.remove("tabTitleActive");
 });
 
 window.addEventListener("unload", function e(e) {

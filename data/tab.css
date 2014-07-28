@@ -29,6 +29,11 @@ h2 {
 h3 {
   font-size: 1.1em;
 }
+
+h2.tabTitleActive {
+  color: red;
+}
+
 a, a:link, a:visited {
   background: lightblue;
   display: block;
