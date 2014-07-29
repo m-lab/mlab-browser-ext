@@ -117,18 +117,13 @@ a:hover, a:active {
 #ResultsList {
   float: left;
 }
-div .testResultHeading:hover {
-  font-weight: bold;
-  color: darkblue;
-  cursor: pointer;
-}
-.testresult {
+
+div.testresult {
   font-style: italic;
   padding-left: 1em;
   border: #999;
 }
-.testResultHeading {
-}
+
 #MajorResultArea {
   position: relative;
   float: left;
@@ -165,6 +160,10 @@ div.Preferences {
 .results-container label {
   position: relative;
   display: block;
+}
+
+.results-container label:hover{
+  cursor: pointer;
 }
 
 .results-container div div {
