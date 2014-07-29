@@ -28,7 +28,7 @@ self.port.on("NDT.testResults", function (results) {
     resultGraphArea.removeChild(resultGraphArea.firstChild);
   }
   var svg = d3.select("#GraphResultsArea").append("svg")
-        .attr("width", width + margin.left + margin.right)
+        .attr("width", width + margin.left + margin.right + 50/*label fudge*/)
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -36,10 +36,14 @@ self.port.on("NDT.testResults", function (results) {
   var data = [
   {
     test: "C2S",
+    prettyName: "Upload",
+    color: "red",
     values: []
   },
   {
     test: "S2C",
+    prettyName: "Download",
+    color: "blue",
     values: []
   }];
 
@@ -117,7 +121,17 @@ self.port.on("NDT.testResults", function (results) {
 
   testLine.append("path")
       .attr("class", "line")
-      .attr("d", function(d) { return line(d.values); });
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return d.color; });
+
+  testLine.append("text")
+      .datum(function(d) { return {name: d.prettyName, value: d.values[0]}; })
+      .attr("transform", function(d) {
+        return "translate(" + x(d.value.time) + "," + y(d.value.value) + ")";
+      })
+      .attr("x", 3)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name; });
 });
 
 self.port.on("NDT.testResult", function (test) {
