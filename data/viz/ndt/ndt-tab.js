@@ -65,9 +65,18 @@ self.port.on("NDT.testResults", function (results) {
       data[findTestIndex("C2S", data)].values.push(newValue);
     }
     if (resultsParsed["S2C"]) {
+      var download = 0;
+      if (parseInt(resultsParsed["S2C"]["exceptions"]) > 0) {
+        console.error("Exceptions; falling back. (graph)");
+        var downloadString = resultsParsed["S2C"]["throughput"];
+        var downloadStringArray = downloadString.split(" ");
+        download = parseInt(downloadStringArray[0], 10) / 1024.00;
+      } else {
+        download = parseInt(resultsParsed["S2C"]["cthroughput"], 10) / 1024.00;
+      }
       newValue = {
         time: resultsTime,
-        value: parseInt(resultsParsed["S2C"].throughput, 10)/1024.0
+        value: download
         };
       data[findTestIndex("S2C", data)].values.push(newValue);
     }
