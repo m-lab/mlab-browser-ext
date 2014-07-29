@@ -1,5 +1,10 @@
 /* vim: set expandtab ts=2 sw=2: */
 self.port.on("NDT.testResults", function (results) {
+
+  /*
+   * Graph generation code originally from
+   * http://bl.ocks.org/mbostock/3884955.
+   */
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
       width = 500 - margin.left - margin.right,
       height = 350 - margin.top - margin.bottom;
