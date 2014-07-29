@@ -157,9 +157,8 @@ self.port.on("NDT.testResult", function (test) {
     error = testResultParsed["error"];
   } else {
     if (parseInt(testResultParsed["S2C"]["exceptions"]) > 0) {
-      console.error("Exceptions; falling back.");
+      console.error("Exceptions; falling back. (list)");
       var downloadString = testResultParsed["S2C"]["throughput"];
-      console.error("downloadString: " + downloadString);
       var downloadStringArray = downloadString.split(" ");
       download = parseFloat(downloadStringArray[0]) / 1024.00;
     } else {
