@@ -24,7 +24,7 @@ self.port.on("NDT.testResults", function (results) {
       .orient("left");
 
   var line = d3.svg.line()
-      .interpolate("basis")
+      .interpolate("linear")
       .x(function(d) { return x(d.time); })
       .y(function(d) { return y(d.value); });
 
@@ -61,10 +61,12 @@ self.port.on("NDT.testResults", function (results) {
 
   for (i in results.results) {
     var resultsTime = new Date(results.results[i].time);
+    var uTime = results.results[i].time;
     var resultsParsed = JSON.parse(results.results[i].results);
     if (resultsParsed["C2S"]) {
       var newValue = {
         time: resultsTime,
+        uTime: uTime,
         value: parseInt(resultsParsed["C2S"].throughput, 10)/1024.0
         };
       data[findTestIndex("C2S", data)].values.push(newValue);
@@ -79,8 +81,9 @@ self.port.on("NDT.testResults", function (results) {
       } else {
         download = parseInt(resultsParsed["S2C"]["cthroughput"], 10) / 1024.00;
       }
-      newValue = {
+      var newValue = {
         time: resultsTime,
+        uTime: uTime,
         value: download
         };
       data[findTestIndex("S2C", data)].values.push(newValue);
@@ -146,6 +149,48 @@ self.port.on("NDT.testResults", function (results) {
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
+
+  svg.selectAll(".circle")
+    .data(data[findTestIndex("S2C", data)].values)
+    .enter()
+    .append("circle")
+    .attr("class", "results-dot")
+    .attr("r", 3.5)
+    .attr("cx", function (d) { return x(d.time); })
+    .attr("cy", function (d) { return y(d.value); })
+    .on("mouseover", function (d) {
+      var element = document.getElementById("resultContainer:" + d.uTime);
+      element.classList.add("hoveredResult");
+    })
+    .on("mouseout", function (d) {
+      var element = document.getElementById("resultContainer:" + d.uTime);
+      element.classList.remove("hoveredResult");
+    })
+    .on("click", function (d) {
+      var element = document.getElementById("input:" + d.uTime);
+      element.checked = !element.checked;
+    });
+
+  svg.selectAll(".circle")
+    .data(data[findTestIndex("C2S", data)].values)
+    .enter()
+    .append("circle")
+    .attr("class", "results-dot")
+    .attr("r", 3.5)
+    .attr("cx", function (d) { return x(d.time); })
+    .attr("cy", function (d) { return y(d.value); })
+    .on("mouseover", function (d) {
+      var element = document.getElementById("resultContainer:" + d.uTime);
+      element.classList.add("hoveredResult");
+    })
+    .on("mouseout", function (d) {
+      var element = document.getElementById("resultContainer:" + d.uTime);
+      element.classList.remove("hoveredResult");
+    })
+    .on("click", function (d) {
+      var element = document.getElementById("input:" + d.uTime);
+      element.checked = !element.checked;
+    });
 });
 
 self.port.on("NDT.testResult", function (test) {
@@ -224,6 +269,8 @@ self.port.on("NDT.testResultsList", function (test) {
     var input = document.createElement("input");
     var label = document.createElement("label");
     var resultsDiv = document.createElement("div");
+
+    div.id = "resultContainer:" + testResults[i];
 
     input.id = "input:" + testResults[i];
     input.type = "checkbox";

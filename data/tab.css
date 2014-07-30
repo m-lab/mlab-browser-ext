@@ -166,6 +166,14 @@ div.Preferences {
   cursor: pointer;
 }
 
+.hoveredResult {
+  font-weight: bold;
+}
+
+.results-dot {
+  cursor: pointer;
+}
+
 .results-container div div {
     background: none repeat scroll 0 0;
     background-color: rgba(157, 157, 157, 0.3);
