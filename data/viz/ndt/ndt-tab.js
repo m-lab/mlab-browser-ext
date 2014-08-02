@@ -65,7 +65,7 @@ self.port.on("NDT.testResults", function (results) {
 
   for (resultsCounter in results.results) {
     var resultsTime = new Date(results.results[resultsCounter].time);
-    var uTime = results.results[i].time;
+    var uTime = results.results[resultsCounter].time;
     var resultsParsed = JSON.parse(results.results[resultsCounter].results);
     var counter = resultsCounter;
     if (resultsParsed["C2S"]) {
