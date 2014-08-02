@@ -180,7 +180,6 @@ div.Preferences {
     margin-top: -1px;
     overflow: hidden;
     height: 0px;
-    width: 0px;
     position: relative;
     z-index: 10;
     transition:
