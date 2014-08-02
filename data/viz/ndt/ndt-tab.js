@@ -8,6 +8,7 @@ self.port.on("NDT.testResults", function (results) {
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
       width = 500 - margin.left - margin.right,
       height = 350 - margin.top - margin.bottom;
+
   var x = d3.scale.linear()
       .range([0, width]);
 
@@ -28,7 +29,10 @@ self.port.on("NDT.testResults", function (results) {
       .x(function(d) { return x(d.counter); })
       .y(function(d) { return y(d.value); });
 
+  var resultsCounter = -1, min = 0, max = 0;
+
   var resultGraphArea = document.getElementById("GraphResultsArea");
+
   while (resultGraphArea.firstChild) {
     resultGraphArea.removeChild(resultGraphArea.firstChild);
   }
@@ -59,11 +63,11 @@ self.port.on("NDT.testResults", function (results) {
     return 0;
   }
 
-  for (i in results.results) {
-    var resultsTime = new Date(results.results[i].time);
+  for (resultsCounter in results.results) {
+    var resultsTime = new Date(results.results[resultsCounter].time);
     var uTime = results.results[i].time;
-    var resultsParsed = JSON.parse(results.results[i].results);
-    var counter = i;
+    var resultsParsed = JSON.parse(results.results[resultsCounter].results);
+    var counter = resultsCounter;
     if (resultsParsed["C2S"]) {
       var newValue = {
         counter: counter,
@@ -93,31 +97,50 @@ self.port.on("NDT.testResults", function (results) {
     }
   }
 
-  x.domain([
-    d3.min(data, function(d) {
-      return d3.min(d.values, function(v) {
-        return v.counter;
-      })
-    }),
-    d3.max(data, function(d) {
-      return d3.max(d.values, function(v) {
-        return v.counter;
-      })
-    }),
-  ]);
+  if (resultsCounter==-1) {
+    var newValue = {
+        counter: 0,
+        time: 0,
+        uTime: 0,
+        value: 0
+        };
+    data[findTestIndex("S2C", data)].values.push(newValue);
+    data[findTestIndex("C2S", data)].values.push(newValue);
 
-  y.domain([
-    d3.min(data, function(d) {
+    newValue = {
+        counter: 0,
+        time: 0,
+        uTime: 0,
+        value: 100
+        };
+    data[findTestIndex("S2C", data)].values.push(newValue);
+    data[findTestIndex("C2S", data)].values.push(newValue);
+
+  }
+
+  min = d3.min(data, function(d) {
+      return d3.min(d.values, function(v) {
+        return v.counter;
+      })
+    });
+  max = d3.max(data, function(d) {
+      return d3.max(d.values, function(v) {
+        return v.counter;
+      })
+    });
+  x.domain([min, (max < 9) ? 9 : max]);
+
+  min = d3.min(data, function(d) {
       return d3.min(d.values, function(v) {
         return v.value;
       })
-    }),
-    d3.max(data, function(d) {
+    });
+  max = d3.max(data, function(d) {
       return d3.max(d.values, function(v) {
         return v.value;
       })
-    }),
-  ]);
+    });
+  y.domain([min, max]);
 
   svg.append("g")
      .attr("class", "x axis")
@@ -139,65 +162,67 @@ self.port.on("NDT.testResults", function (results) {
                 .enter().append("g")
                 .attr("class", "testLine");
 
-  testLine.append("path")
+  if (resultsCounter!=-1) {
+    testLine.append("path")
       .attr("class", "line")
       .attr("d", function(d) { return line(d.values); })
       .style("stroke", function(d) { return d.color; });
 
-  testLine.append("text")
-      .datum(function(d) { return {
-            name: d.prettyName,
-            value: d.values[d.values.length -1]
-          };
+    testLine.append("text")
+        .datum(function(d) { return {
+              name: d.prettyName,
+              value: d.values[d.values.length -1]
+            };
+          })
+        .attr("transform", function(d) {
+          return "translate("+x(d.value.counter)+","+y(d.value.value)+")";
         })
-      .attr("transform", function(d) {
-        return "translate(" + x(d.value.counter) + "," + y(d.value.value) + ")";
+        .attr("x", 3)
+        .attr("dy", ".35em")
+        .text(function(d) { return d.name; });
+
+    svg.selectAll(".circle")
+      .data(data[findTestIndex("S2C", data)].values)
+      .enter()
+      .append("circle")
+      .attr("class", "results-dot")
+      .attr("r", 3.5)
+      .attr("cx", function (d) { return x(d.counter); })
+      .attr("cy", function (d) { return y(d.value); })
+      .on("mouseover", function (d) {
+        var element = document.getElementById("resultContainer:" + d.uTime);
+        element.classList.add("hoveredResult");
       })
-      .attr("x", 3)
-      .attr("dy", ".35em")
-      .text(function(d) { return d.name; });
+      .on("mouseout", function (d) {
+        var element = document.getElementById("resultContainer:" + d.uTime);
+        element.classList.remove("hoveredResult");
+      })
+      .on("click", function (d) {
+        var element = document.getElementById("input:" + d.uTime);
+        element.checked = !element.checked;
+      });
 
-  svg.selectAll(".circle")
-    .data(data[findTestIndex("S2C", data)].values)
-    .enter()
-    .append("circle")
-    .attr("class", "results-dot")
-    .attr("r", 3.5)
-    .attr("cx", function (d) { return x(d.counter); })
-    .attr("cy", function (d) { return y(d.value); })
-    .on("mouseover", function (d) {
-      var element = document.getElementById("resultContainer:" + d.uTime);
-      element.classList.add("hoveredResult");
-    })
-    .on("mouseout", function (d) {
-      var element = document.getElementById("resultContainer:" + d.uTime);
-      element.classList.remove("hoveredResult");
-    })
-    .on("click", function (d) {
-      var element = document.getElementById("input:" + d.uTime);
-      element.checked = !element.checked;
-    });
-
-  svg.selectAll(".circle")
-    .data(data[findTestIndex("C2S", data)].values)
-    .enter()
-    .append("circle")
-    .attr("class", "results-dot")
-    .attr("r", 3.5)
-    .attr("cx", function (d) { return x(d.counter); })
-    .attr("cy", function (d) { return y(d.value); })
-    .on("mouseover", function (d) {
-      var element = document.getElementById("resultContainer:" + d.uTime);
-      element.classList.add("hoveredResult");
-    })
-    .on("mouseout", function (d) {
-      var element = document.getElementById("resultContainer:" + d.uTime);
-      element.classList.remove("hoveredResult");
-    })
-    .on("click", function (d) {
-      var element = document.getElementById("input:" + d.uTime);
-      element.checked = !element.checked;
-    });
+    svg.selectAll(".circle")
+      .data(data[findTestIndex("C2S", data)].values)
+      .enter()
+      .append("circle")
+      .attr("class", "results-dot")
+      .attr("r", 3.5)
+      .attr("cx", function (d) { return x(d.counter); })
+      .attr("cy", function (d) { return y(d.value); })
+      .on("mouseover", function (d) {
+        var element = document.getElementById("resultContainer:" + d.uTime);
+        element.classList.add("hoveredResult");
+      })
+      .on("mouseout", function (d) {
+        var element = document.getElementById("resultContainer:" + d.uTime);
+        element.classList.remove("hoveredResult");
+      })
+      .on("click", function (d) {
+        var element = document.getElementById("input:" + d.uTime);
+        element.checked = !element.checked;
+      });
+  }
 });
 
 self.port.on("NDT.testResult", function (test) {
@@ -270,30 +295,40 @@ self.port.on("NDT.testResultsList", function (test) {
     resultsList.removeChild(resultsList.firstChild);
   }
 
-  for (i in testResults) {
-    var formattedTime = new Date(testResults[i]);
-    var div = document.createElement("div");
-    var input = document.createElement("input");
-    var label = document.createElement("label");
-    var resultsDiv = document.createElement("div");
 
-    div.id = "resultContainer:" + testResults[i];
+  if (testResults.length == 0) {
+      var div = document.createElement("div");
 
-    input.id = "input:" + testResults[i];
-    input.type = "checkbox";
-    label.htmlFor = input.id;
+      div.className = "noResults";
+      div.appendChild(document.createTextNode("No results yet."));
 
-    resultsDiv.id = "result:" + testResults[i];
-    resultsDiv.className = "testresult";
+      resultsList.appendChild(div);
+  } else {
+    for (i in testResults) {
+      var formattedTime = new Date(testResults[i]);
+      var div = document.createElement("div");
+      var input = document.createElement("input");
+      var label = document.createElement("label");
+      var resultsDiv = document.createElement("div");
 
-    label.appendChild(document.createTextNode( (+i+1) + ". " + formattedTime));
-    div.appendChild(input);
-    div.appendChild(label);
-    div.appendChild(resultsDiv);
+      div.id = "resultContainer:" + testResults[i];
 
-    resultsList.appendChild(div);
+      input.id = "input:" + testResults[i];
+      input.type = "checkbox";
+      label.htmlFor = input.id;
 
-    getTestResult(testTest, testResults[i]);
+      resultsDiv.id = "result:" + testResults[i];
+      resultsDiv.className = "testresult";
+
+      label.appendChild(document.createTextNode((+i+1) + ". " + formattedTime));
+      div.appendChild(input);
+      div.appendChild(label);
+      div.appendChild(resultsDiv);
+
+      resultsList.appendChild(div);
+
+      getTestResult(testTest, testResults[i]);
+    }
   }
 });
 
