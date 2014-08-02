@@ -28,10 +28,6 @@ function setVisibleTest(testName) {
   self.port.emit("setVisibleTest", testName);
 }
 
-function openTab(tabName) {
-  self.port.emit("openTab", tabName);
-}
-
 function setTestTitle(testTitle) {
   var titleElement = document.getElementById("TestInfoAreaTitle");
   while (titleElement.firstChild) {
