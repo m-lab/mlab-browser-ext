@@ -34,7 +34,7 @@ h2.tabTitleActive {
   color: red;
 }
 
-a, a:link, a:visited {
+a.ui_link, a.ui_link:link, a.ui_link:visited {
   background: lightblue;
   display: block;
   padding: .5em;
@@ -42,7 +42,7 @@ a, a:link, a:visited {
   font-size: .9em;
   color: #000;
 } 
-a:hover, a:active {
+a.ui_link:hover, a.ui_link:active {
   background: darkblue;
   cursor: pointer;
   display: block;

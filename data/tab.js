@@ -38,10 +38,12 @@ function setTestTitle(testTitle) {
 
 function setTestBody(testBody) {
   var bodyElement = document.getElementById("TestInfoAreaBody");
+  var div = document.createElement('div');
   while (bodyElement.firstChild) {
     bodyElement.removeChild(bodyElement.firstChild);
   }
-  bodyElement.appendChild(document.createTextNode(testBody));
+  div.innerHTML = testBody;
+  bodyElement.appendChild(div);
 }
 
 self.port.on("testTitle", function (testTitle) {
@@ -170,10 +172,12 @@ function renderTest(testName) {
   actionsTitleElement.appendChild(document.createTextNode("Actions:"));
 */
   startElement = document.createElement('a');
+  startElement.classList.add("ui_link");
   startElement.onclick = generateRunTestClickHandler(testName);
   startElement.appendChild(document.createTextNode("Start a test"));
 
   preferencesTitleElement = document.createElement('a');
+  preferencesTitleElement.classList.add("ui_link");
   preferencesTitleElement.onclick = generateAccordianHandler(testName);
   preferencesTitleElement.appendChild(document.createTextNode("Preferences"));
 
