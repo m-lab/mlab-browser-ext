@@ -40,14 +40,12 @@ a, a:link, a:visited {
   padding: .5em;
   font-weight: bold;
   font-size: .9em;
-  padding-left: .2em;
   color: #000;
 } 
 a:hover, a:active {
   background: darkblue;
   cursor: pointer;
   display: block;
-  padding: .5em;
   font-weight: bold;
   color: #fff;
 } 
