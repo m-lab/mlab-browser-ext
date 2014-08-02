@@ -8,8 +8,7 @@ self.port.on("NDT.testResults", function (results) {
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
       width = 500 - margin.left - margin.right,
       height = 350 - margin.top - margin.bottom;
-
-  var x = d3.time.scale()
+  var x = d3.scale.linear()
       .range([0, width]);
 
   var y = d3.scale.linear()
@@ -17,7 +16,8 @@ self.port.on("NDT.testResults", function (results) {
 
   var xAxis = d3.svg.axis()
       .scale(x)
-      .orient("bottom");
+      .orient("bottom")
+      .tickFormat(function (d) { return "" + (d+1); });
 
   var yAxis = d3.svg.axis()
       .scale(y)
@@ -25,7 +25,7 @@ self.port.on("NDT.testResults", function (results) {
 
   var line = d3.svg.line()
       .interpolate("linear")
-      .x(function(d) { return x(d.time); })
+      .x(function(d) { return x(d.counter); })
       .y(function(d) { return y(d.value); });
 
   var resultGraphArea = document.getElementById("GraphResultsArea");
@@ -63,8 +63,10 @@ self.port.on("NDT.testResults", function (results) {
     var resultsTime = new Date(results.results[i].time);
     var uTime = results.results[i].time;
     var resultsParsed = JSON.parse(results.results[i].results);
+    var counter = i;
     if (resultsParsed["C2S"]) {
       var newValue = {
+        counter: counter,
         time: resultsTime,
         uTime: uTime,
         value: parseInt(resultsParsed["C2S"].throughput, 10)/1024.0
@@ -82,6 +84,7 @@ self.port.on("NDT.testResults", function (results) {
         download = parseInt(resultsParsed["S2C"]["cthroughput"], 10) / 1024.00;
       }
       var newValue = {
+        counter: counter,
         time: resultsTime,
         uTime: uTime,
         value: download
@@ -93,12 +96,12 @@ self.port.on("NDT.testResults", function (results) {
   x.domain([
     d3.min(data, function(d) {
       return d3.min(d.values, function(v) {
-        return v.time;
+        return v.counter;
       })
     }),
     d3.max(data, function(d) {
       return d3.max(d.values, function(v) {
-        return v.time;
+        return v.counter;
       })
     }),
   ]);
@@ -142,9 +145,13 @@ self.port.on("NDT.testResults", function (results) {
       .style("stroke", function(d) { return d.color; });
 
   testLine.append("text")
-      .datum(function(d) { return {name: d.prettyName, value: d.values[0]}; })
+      .datum(function(d) { return {
+            name: d.prettyName,
+            value: d.values[d.values.length -1]
+          };
+        })
       .attr("transform", function(d) {
-        return "translate(" + x(d.value.time) + "," + y(d.value.value) + ")";
+        return "translate(" + x(d.value.counter) + "," + y(d.value.value) + ")";
       })
       .attr("x", 3)
       .attr("dy", ".35em")
@@ -156,7 +163,7 @@ self.port.on("NDT.testResults", function (results) {
     .append("circle")
     .attr("class", "results-dot")
     .attr("r", 3.5)
-    .attr("cx", function (d) { return x(d.time); })
+    .attr("cx", function (d) { return x(d.counter); })
     .attr("cy", function (d) { return y(d.value); })
     .on("mouseover", function (d) {
       var element = document.getElementById("resultContainer:" + d.uTime);
@@ -177,7 +184,7 @@ self.port.on("NDT.testResults", function (results) {
     .append("circle")
     .attr("class", "results-dot")
     .attr("r", 3.5)
-    .attr("cx", function (d) { return x(d.time); })
+    .attr("cx", function (d) { return x(d.counter); })
     .attr("cy", function (d) { return y(d.value); })
     .on("mouseover", function (d) {
       var element = document.getElementById("resultContainer:" + d.uTime);
@@ -279,7 +286,7 @@ self.port.on("NDT.testResultsList", function (test) {
     resultsDiv.id = "result:" + testResults[i];
     resultsDiv.className = "testresult";
 
-    label.appendChild(document.createTextNode(formattedTime));
+    label.appendChild(document.createTextNode( (+i+1) + ". " + formattedTime));
     div.appendChild(input);
     div.appendChild(label);
     div.appendChild(resultsDiv);
