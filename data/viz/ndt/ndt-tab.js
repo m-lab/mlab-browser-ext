@@ -189,13 +189,22 @@ self.port.on("NDT.testResults", function (results) {
       .attr("r", 3.5)
       .attr("cx", function (d) { return x(d.counter); })
       .attr("cy", function (d) { return y(d.value); })
+      .attr("id", function (d) {return "dot:S2C:" + d.uTime; })
       .on("mouseover", function (d) {
         var element = document.getElementById("resultContainer:" + d.uTime);
         element.classList.add("hoveredResult");
+        element = document.getElementById("dot:S2C:" + d.uTime);
+        element.classList.add("results-dot-hover");
+        element = document.getElementById("dot:C2S:" + d.uTime);
+        element.classList.add("results-dot-hover");
       })
       .on("mouseout", function (d) {
         var element = document.getElementById("resultContainer:" + d.uTime);
         element.classList.remove("hoveredResult");
+        element = document.getElementById("dot:S2C:" + d.uTime);
+        element.classList.remove("results-dot-hover");
+        element = document.getElementById("dot:C2S:" + d.uTime);
+        element.classList.remove("results-dot-hover");
       })
       .on("click", function (d) {
         var element = document.getElementById("input:" + d.uTime);
@@ -210,13 +219,22 @@ self.port.on("NDT.testResults", function (results) {
       .attr("r", 3.5)
       .attr("cx", function (d) { return x(d.counter); })
       .attr("cy", function (d) { return y(d.value); })
+      .attr("id", function (d) {return "dot:C2S:" + d.uTime; })
       .on("mouseover", function (d) {
         var element = document.getElementById("resultContainer:" + d.uTime);
         element.classList.add("hoveredResult");
+        element = document.getElementById("dot:S2C:" + d.uTime);
+        element.classList.add("results-dot-hover");
+        element = document.getElementById("dot:C2S:" + d.uTime);
+        element.classList.add("results-dot-hover");
       })
       .on("mouseout", function (d) {
         var element = document.getElementById("resultContainer:" + d.uTime);
         element.classList.remove("hoveredResult");
+        element = document.getElementById("dot:S2C:" + d.uTime);
+        element.classList.remove("results-dot-hover");
+        element = document.getElementById("dot:C2S:" + d.uTime);
+        element.classList.remove("results-dot-hover");
       })
       .on("click", function (d) {
         var element = document.getElementById("input:" + d.uTime);
@@ -276,6 +294,24 @@ self.port.on("NDT.testDone", function (test) {
   generateTestResults(testTest);
 });
 
+function generateResultMouseOverHandler(testTime) {
+  return function () {
+    var element = document.getElementById("dot:S2C:" + testTime);
+    element.classList.add("results-dot-hover");
+    element = document.getElementById("dot:C2S:" + testTime);
+    element.classList.add("results-dot-hover");
+  }
+}
+
+function generateResultMouseOutHandler(testTime) {
+  return function () {
+    var element = document.getElementById("dot:S2C:" + testTime);
+    element.classList.remove("results-dot-hover");
+    element = document.getElementById("dot:C2S:" + testTime);
+    element.classList.remove("results-dot-hover");
+  }
+}
+
 self.port.on("NDT.testResultsList", function (test) {
   console.error("We are here.");
   var testResults, resultsList, testTest = "NDT";
@@ -312,6 +348,8 @@ self.port.on("NDT.testResultsList", function (test) {
       var resultsDiv = document.createElement("div");
 
       div.id = "resultContainer:" + testResults[i];
+      div.onmouseover = generateResultMouseOverHandler(testResults[i]);
+      div.onmouseout = generateResultMouseOutHandler(testResults[i]);
 
       input.id = "input:" + testResults[i];
       input.type = "checkbox";

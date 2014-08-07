@@ -170,6 +170,13 @@ div.Preferences {
 
 .results-dot {
   cursor: pointer;
+  fill: #ccc;
+  stroke: black;
+  stroke-width: 1;
+}
+
+.results-dot-hover {
+  stroke-width: 4;
 }
 
 .results-container div div {
