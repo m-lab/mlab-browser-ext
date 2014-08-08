@@ -211,15 +211,21 @@ self.port.on("initialize", function () {
 });
 
 self.port.on("testStarted", function (test) {
-  var element = document.getElementById("TabTitle:" + test);
+  var element = document.getElementById("test-running");
   if (!element) { return; }
-  element.classList.add("tabTitleActive");
+  element.style.visibility = "visible";
+  element = document.getElementById("test-running-label");
+  element.appendChild(document.createTextNode(test + " test is running..."));
 });
 
 self.port.on("testStopped", function (test) {
-  var element = document.getElementById("TabTitle:" + test);
+  var element = document.getElementById("test-running");
   if (!element) { return; }
-  element.classList.remove("tabTitleActive");
+  element.style.visibility = "hidden";
+  element = document.getElementById("test-running-label");
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
 });
 
 window.addEventListener("unload", function e(e) {

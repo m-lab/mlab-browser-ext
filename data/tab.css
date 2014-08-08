@@ -20,6 +20,32 @@ body {
   stroke-width: 1.5px;
 }
 
+.dim {
+  height:100%;
+  width:100%;
+  position:fixed;
+  left:0;
+  top:0;
+  z-index:1 !important;
+  background-color:black;
+  visibility: hidden;
+  filter: alpha(opacity=75); /* internet explorer */
+  -khtml-opacity: 0.75;      /* khtml, old safari */
+  -moz-opacity: 0.75;       /* mozilla, netscape */
+  opacity: 0.75;           /* fx, safari, opera */
+}
+
+.dim-running {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  height: 100px;
+  width: 300px;
+  z-index:2;
+  text-align: center;
+  color: white;
+}
+
 h1 {
   font-size: 1.5em;
 }
