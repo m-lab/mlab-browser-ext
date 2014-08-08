@@ -211,21 +211,21 @@ self.port.on("initialize", function () {
 });
 
 self.port.on("testStarted", function (test) {
-  var element = document.getElementById("test-running");
-  if (!element) { return; }
-  element.style.visibility = "visible";
-  element = document.getElementById("test-running-label");
-  element.appendChild(document.createTextNode(test + " test is running..."));
+  var runningElement = null, labelElement = null;
+  runningElement = document.getElementById("test-running");
+  if (!runningElement) { return; }
+  runningElement.style.visibility = "visible";
+  labelElement = document.getElementById("test-running-label");
+  labelElement.appendChild(document.createTextNode(test + " test is running..."));
 });
 
 self.port.on("testStopped", function (test) {
-  var element = document.getElementById("test-running");
-  if (!element) { return; }
-  element.style.visibility = "hidden";
-  element = document.getElementById("test-running-label");
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
-  }
+  var labelElement = null, runningElement = null;
+  runningElement = document.getElementById("test-running");
+  if (!runningElement) { return; }
+  runningElement.style.visibility = "hidden";
+  labelElement = document.getElementById("test-running-label");
+  labelElement.removeChild(runningElement);
 });
 
 window.addEventListener("unload", function e(e) {
