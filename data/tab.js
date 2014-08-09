@@ -216,16 +216,18 @@ self.port.on("testStarted", function (test) {
   if (!runningElement) { return; }
   runningElement.style.visibility = "visible";
   labelElement = document.getElementById("test-running-label");
-  labelElement.appendChild(document.createTextNode(test + " test is running..."));
+  labelElement.appendChild(document.createTextNode(test + " test is running ..."));
 });
 
 self.port.on("testStopped", function (test) {
-  var labelElement = null, runningElement = null;
+  var runningElement = null, labelElement = null;
   runningElement = document.getElementById("test-running");
   if (!runningElement) { return; }
   runningElement.style.visibility = "hidden";
   labelElement = document.getElementById("test-running-label");
-  labelElement.removeChild(runningElement);
+  while (labelElement.firstChild) {
+    labelElement.removeChild(labelElement.firstChild);
+  }
 });
 
 window.addEventListener("unload", function e(e) {
