@@ -235,6 +235,6 @@ self.port.on("testStopped", function (test) {
   }
 });
 
-window.addEventListener("unload", function e(e) {
+window.addEventListener("beforeunload", function (e) {
   self.port.emit("unload");
 });
