@@ -109,8 +109,11 @@ a.ui_link:hover, a.ui_link:active {
 
 #TestArea {
   float: left;
-  margin: 1em;
-  margin-left: 2em;
+  padding: 2em;
+  padding-top: 0em;
+  border: solid;
+  border-width: 1px;
+  border-color: black;
 }
 #TestArea a:link, 
 #TestArea a:visited, 
@@ -122,7 +125,6 @@ a.ui_link:hover, a.ui_link:active {
   display: block;
   padding: .5em;
 }
-#TestArea h2:hover,
 #TestArea h4:hover {
   cursor: pointer;
   color: white;

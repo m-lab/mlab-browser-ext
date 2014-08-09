@@ -154,7 +154,7 @@ function generateAccordianHandler(testName) {
 function renderTest(testName) {
   var testContainerElement, titleElement, listContainerElement,
       preferencesElement, startElement, preferencesTitleElement,
-      actionsTitleElement;
+      actionsTitleElement, resultsElement;
 
   listContainerElement = document.getElementById("TestArea");
 
@@ -163,7 +163,6 @@ function renderTest(testName) {
 
 
   titleElement = document.createElement('h2');
-  titleElement.onclick = generateResultsClickHandler(testName);
   titleElement.id = "TabTitle:" + testName;
   titleElement.appendChild(document.createTextNode(testName));
 
@@ -185,11 +184,17 @@ function renderTest(testName) {
   preferencesElement.id = testName + "_PreferencesArea";
   preferencesElement.className = "Preferences";
 
+  resultsElement = document.createElement('a');
+  resultsElement.classList.add("ui_link");
+  resultsElement.onclick = generateResultsClickHandler(testName);
+  resultsElement.appendChild(document.createTextNode("Results"));
+
   testContainerElement.appendChild(titleElement);
+  testContainerElement.appendChild(startElement);
+  testContainerElement.appendChild(resultsElement);
   testContainerElement.appendChild(preferencesTitleElement);
   testContainerElement.appendChild(preferencesElement);
   testContainerElement.appendChild(actionsTitleElement);
-  testContainerElement.appendChild(startElement);
 
   listContainerElement.appendChild(testContainerElement);
   testContainerElement.appendChild(document.createElement('br'));
