@@ -5,12 +5,13 @@ self.port.on("NDT.testResults", function (results) {
    * Graph generation code originally from
    * http://bl.ocks.org/mbostock/3884955.
    */
-  var margin = {top: 20, right: 20, bottom: 30, left: 50},
+  var margin = {top: 20, right: 20, bottom: 60, left: 50},
       width = 500 - margin.left - margin.right,
       height = 350 - margin.top - margin.bottom;
 
-  var x = d3.scale.linear()
-      .range([0, width]);
+/*  var x = d3.scale.linear() */
+  var x = d3.time.scale()
+      .range([width, 0]);
 
   var y = d3.scale.linear()
       .range([height, 0]);
@@ -18,7 +19,8 @@ self.port.on("NDT.testResults", function (results) {
   var xAxis = d3.svg.axis()
       .scale(x)
       .orient("bottom")
-      .tickFormat(function (d) { return "" + (d+1); });
+      .tickFormat(function(d) { return d3.time.format('%b %d')(new Date(d)) });
+/*      .tickFormat(function (d) { return "" + (d+1); }); */
 
   var yAxis = d3.svg.axis()
       .scale(y)
@@ -145,7 +147,14 @@ self.port.on("NDT.testResults", function (results) {
   svg.append("g")
      .attr("class", "x axis")
      .attr("transform", "translate(0," + height + ")")
-     .call(xAxis);
+     .call(xAxis)
+     .selectAll("text")  
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", function(d) {
+            return "rotate(-55)" 
+            });
 
   svg.append("g")
      .attr("class", "y axis")
