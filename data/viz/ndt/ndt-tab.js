@@ -233,7 +233,7 @@ self.port.on("NDT.testResults", function (results) {
         element = document.getElementById("dot:C2S:" + d.uTime);
         element.classList.add("results-dot-hover");
         tooltip.style("visibility", "visible");
-        tooltip.text(d.value);
+        tooltip.text(d.value.toFixed(2) + "Mbps");
         tooltip.style("top", (d3.event.pageY-10)+"px")
           .style("left",(d3.event.pageX+15)+"px")
           .style("background-color", "blue");
@@ -269,7 +269,7 @@ self.port.on("NDT.testResults", function (results) {
         element = document.getElementById("dot:C2S:" + d.uTime);
         element.classList.add("results-dot-hover");
         tooltip.style("visibility", "visible");
-        tooltip.text(d.value);
+        tooltip.text(d.value.toFixed(2) + "Mbps");
         tooltip.style("top", (d3.event.pageY-10)+"px")
           .style("left",(d3.event.pageX+15)+"px")
           .style("background-color", "red");
