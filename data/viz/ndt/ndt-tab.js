@@ -35,6 +35,8 @@ self.port.on("NDT.testResults", function (results) {
       .x(function(d) { return x(d.uTime); })
       .y(function(d) { return y(d.value); });
 
+  var tooltip = d3.select("#tooltip");
+
   var resultsIterator = 0, resultsCounter = 0, min = 0, max = 0;
 
   var resultGraphArea = document.getElementById("GraphResultsArea");
@@ -230,6 +232,11 @@ self.port.on("NDT.testResults", function (results) {
         element.classList.add("results-dot-hover");
         element = document.getElementById("dot:C2S:" + d.uTime);
         element.classList.add("results-dot-hover");
+        tooltip.style("visibility", "visible");
+        tooltip.text(d.value);
+        tooltip.style("top", (d3.event.pageY-10)+"px")
+          .style("left",(d3.event.pageX+15)+"px")
+          .style("background-color", "blue");
       })
       .on("mouseout", function (d) {
         var element = document.getElementById("resultContainer:" + d.uTime);
@@ -238,6 +245,7 @@ self.port.on("NDT.testResults", function (results) {
         element.classList.remove("results-dot-hover");
         element = document.getElementById("dot:C2S:" + d.uTime);
         element.classList.remove("results-dot-hover");
+        tooltip.style("visibility", "hidden");
       })
       .on("click", function (d) {
         var element = document.getElementById("input:" + d.uTime);
@@ -260,6 +268,11 @@ self.port.on("NDT.testResults", function (results) {
         element.classList.add("results-dot-hover");
         element = document.getElementById("dot:C2S:" + d.uTime);
         element.classList.add("results-dot-hover");
+        tooltip.style("visibility", "visible");
+        tooltip.text(d.value);
+        tooltip.style("top", (d3.event.pageY-10)+"px")
+          .style("left",(d3.event.pageX+15)+"px")
+          .style("background-color", "red");
       })
       .on("mouseout", function (d) {
         var element = document.getElementById("resultContainer:" + d.uTime);
@@ -268,6 +281,7 @@ self.port.on("NDT.testResults", function (results) {
         element.classList.remove("results-dot-hover");
         element = document.getElementById("dot:C2S:" + d.uTime);
         element.classList.remove("results-dot-hover");
+        tooltip.style("visibility", "hidden");
       })
       .on("click", function (d) {
         var element = document.getElementById("input:" + d.uTime);

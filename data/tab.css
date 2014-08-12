@@ -232,3 +232,13 @@ div.Preferences {
     background: none repeat scroll 0 0;
     background-color: rgba(157, 157, 157, 0.3);
 }
+
+div.tooltip_style {
+  position: absolute;
+  z-index: 10;
+  visibility: hidden;
+  color: white;
+  padding: 4px;
+  border-color: black;
+  border-radius: 5px;
+}
