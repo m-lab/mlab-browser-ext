@@ -9,9 +9,7 @@ self.port.on("NDT.testResults", function (results) {
       width = 500 - margin.left - margin.right,
       height = 350 - margin.top - margin.bottom;
 
-/*  var x = d3.scale.linear() */
-  var x = d3.time.scale()
-      .range([width, 0]);
+  var x = d3.scale.ordinal();
 
   var y = d3.scale.linear()
       .range([height, 0]);
@@ -19,8 +17,14 @@ self.port.on("NDT.testResults", function (results) {
   var xAxis = d3.svg.axis()
       .scale(x)
       .orient("bottom")
-      .tickFormat(function(d) { return d3.time.format('%b %d')(new Date(d)) });
-/*      .tickFormat(function (d) { return "" + (d+1); }); */
+      .ticks(10)
+      .tickFormat(function (d) {
+        if (d>=0) {
+          return d3.time.format('%b %d')(new Date(d));
+        } else {
+          return "";
+        }
+      });
 
   var yAxis = d3.svg.axis()
       .scale(y)
@@ -28,10 +32,10 @@ self.port.on("NDT.testResults", function (results) {
 
   var line = d3.svg.line()
       .interpolate("linear")
-      .x(function(d) { return x(d.counter); })
+      .x(function(d) { return x(d.uTime); })
       .y(function(d) { return y(d.value); });
 
-  var resultsCounter = -1, min = 0, max = 0;
+  var resultsIterator = 0, resultsCounter = 0, min = 0, max = 0;
 
   var resultGraphArea = document.getElementById("GraphResultsArea");
 
@@ -65,14 +69,12 @@ self.port.on("NDT.testResults", function (results) {
     return 0;
   }
 
-  for (resultsCounter in results.results) {
-    var resultsTime = new Date(results.results[resultsCounter].time);
-    var uTime = results.results[resultsCounter].time;
-    var resultsParsed = JSON.parse(results.results[resultsCounter].results);
-    var counter = resultsCounter;
+  for (resultsIterator in results.results) {
+    var resultsTime = new Date(results.results[resultsIterator].time);
+    var uTime = results.results[resultsIterator].time;
+    var resultsParsed = JSON.parse(results.results[resultsIterator].results);
     if (resultsParsed["C2S"]) {
       var newValue = {
-        counter: counter,
         time: resultsTime,
         uTime: uTime,
         value: parseInt(resultsParsed["C2S"].throughput, 10)/1024.0
@@ -90,47 +92,54 @@ self.port.on("NDT.testResults", function (results) {
         download = parseInt(resultsParsed["S2C"]["cthroughput"], 10) / 1024.00;
       }
       var newValue = {
-        counter: counter,
         time: resultsTime,
         uTime: uTime,
         value: download
         };
       data[findTestIndex("S2C", data)].values.push(newValue);
     }
+    resultsCounter++;
   }
 
-  if (resultsCounter==-1) {
+  /*
+   * Insert dummy values so that our graph always
+   * looks pretty.
+   */
+  while (resultsCounter<10) {
     var newValue = {
-        counter: 0,
-        time: 0,
-        uTime: 0,
+        time: -1,
+        uTime: -1 * resultsCounter - 1,
         value: 0
         };
     data[findTestIndex("S2C", data)].values.push(newValue);
     data[findTestIndex("C2S", data)].values.push(newValue);
 
     newValue = {
-        counter: 0,
-        time: 0,
-        uTime: 0,
+        time: -1,
+        uTime: -1 * resultsCounter - 1,
         value: 100
         };
     data[findTestIndex("S2C", data)].values.push(newValue);
     data[findTestIndex("C2S", data)].values.push(newValue);
-
+    resultsCounter++;
   }
 
   min = d3.min(data, function(d) {
       return d3.min(d.values, function(v) {
-        return v.counter;
+        if (v.uTime == -1) {
+          return Number.MAX_VALUE;
+        } else {
+          return v.uTime;
+        }
       })
     });
   max = d3.max(data, function(d) {
       return d3.max(d.values, function(v) {
-        return v.counter;
+        return v.uTime;
       })
     });
-  x.domain([min, (max < 9) ? 9 : max]);
+  x.domain(data[0].values.map(function (d) { return d.uTime;}));
+  x.rangePoints([width, 0]);
 
   min = d3.min(data, function(d) {
       return d3.min(d.values, function(v) {
@@ -143,6 +152,21 @@ self.port.on("NDT.testResults", function (results) {
       })
     });
   y.domain([min, max]);
+
+  /*
+   * And now filter those values so that
+   * the graph doesn't look messy.
+   */
+  data[findTestIndex("S2C", data)].values =
+    data[findTestIndex("S2C", data)].values.filter(function (d) {
+      return (d.uTime>=0);
+    }
+  );
+  data[findTestIndex("C2S", data)].values =
+    data[findTestIndex("C2S", data)].values.filter(function (d) {
+      return (d.uTime>=0);
+    }
+  );
 
   svg.append("g")
      .attr("class", "x axis")
@@ -180,11 +204,11 @@ self.port.on("NDT.testResults", function (results) {
     testLine.append("text")
         .datum(function(d) { return {
               name: d.prettyName,
-              value: d.values[d.values.length -1]
+              value: d.values[0]
             };
           })
         .attr("transform", function(d) {
-          return "translate("+x(d.value.counter)+","+y(d.value.value)+")";
+          return "translate("+x(d.value.uTime)+","+y(d.value.value)+")";
         })
         .attr("x", 3)
         .attr("dy", ".35em")
@@ -196,7 +220,7 @@ self.port.on("NDT.testResults", function (results) {
       .append("circle")
       .attr("class", "results-dot")
       .attr("r", 3.5)
-      .attr("cx", function (d) { return x(d.counter); })
+      .attr("cx", function (d) { return x(d.uTime); })
       .attr("cy", function (d) { return y(d.value); })
       .attr("id", function (d) {return "dot:S2C:" + d.uTime; })
       .on("mouseover", function (d) {
@@ -226,7 +250,7 @@ self.port.on("NDT.testResults", function (results) {
       .append("circle")
       .attr("class", "results-dot")
       .attr("r", 3.5)
-      .attr("cx", function (d) { return x(d.counter); })
+      .attr("cx", function (d) { return x(d.uTime); })
       .attr("cy", function (d) { return y(d.value); })
       .attr("id", function (d) {return "dot:C2S:" + d.uTime; })
       .on("mouseover", function (d) {
