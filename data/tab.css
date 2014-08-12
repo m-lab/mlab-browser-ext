@@ -39,8 +39,8 @@ body {
   margin: auto;
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
-  height: 200px;
   width: 150px;
+  height: 250px;
   z-index:2;
   text-align: center;
   color: white;

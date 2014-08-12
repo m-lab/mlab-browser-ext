@@ -9,6 +9,10 @@ function setMaxVisibleResults(newMaxVisibleResults) {
   gMaxVisibleResults = newMaxVisibleResults;
 }
 
+function getTestDuration(testName) {
+  self.port.emit("getTestDuration", testName);
+}
+
 function listTests() {
   self.port.emit("listTests");
 }
@@ -220,8 +224,39 @@ self.port.on("testStarted", function (test) {
   runningElement = document.getElementById("test-running");
   if (!runningElement) { return; }
   runningElement.style.visibility = "visible";
+  getTestDuration(test);
+});
+
+self.port.on("testDuration", function (td) {
+  var labelElement = null, runningElement = null;
+  runningElement = document.getElementById("test-running");
   labelElement = document.getElementById("test-running-label");
-  labelElement.appendChild(document.createTextNode(test + " test is running ..."));
+  if (runningElement != null && runningElement.style.visibility == "visible") {
+    var minutes = 0, seconds = 0, time = "";
+    if (td.duration > 0) {
+      minutes = Math.floor(td.duration / 60.0);
+      seconds = td.duration % 60;
+      if (minutes>0) {
+        time = "" + minutes + " minute";
+        if (minutes>1) {
+          time += "s";
+        }
+        time += " ";
+      }
+      if (seconds>0) {
+        time += "" + seconds + " second";
+        if (seconds>1) {
+          time += "s";
+        }
+      }
+    }
+    var message = td.name + " is running.";
+    if (time != "") {
+      message += " Test will take approximately " + time + "."
+    }
+    var textNode = document.createTextNode(message);
+    labelElement.appendChild(textNode);
+  }
 });
 
 self.port.on("testStopped", function (test) {
