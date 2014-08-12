@@ -69,6 +69,7 @@ a.ui_link, a.ui_link:link, a.ui_link:visited {
   font-weight: bold;
   font-size: .9em;
   color: #000;
+  box-shadow: 5px 5px 5px #666;
 } 
 a.ui_link:hover, a.ui_link:active {
   background: darkblue;
@@ -76,6 +77,7 @@ a.ui_link:hover, a.ui_link:active {
   display: block;
   font-weight: bold;
   color: #fff;
+  box-shadow: 5px 5px 5px #666;
 } 
 #container-left {
   width: 15%;
@@ -102,6 +104,13 @@ a.ui_link:hover, a.ui_link:active {
   margin: 1em;
   width: 100%;
 }
+#infoTextArea {
+  background: none repeat scroll 0 0 lightblue;
+  padding-left: 1em;
+  width: 90%;
+  border-radius: 1em;
+  box-shadow: 5px 5px 5px #666;
+}
 
 #TestInfoAreaTitle {
   font-size: 1.5em;
@@ -111,9 +120,6 @@ a.ui_link:hover, a.ui_link:active {
   float: left;
   padding: 2em;
   padding-top: 0em;
-  border: solid;
-  border-width: 1px;
-  border-color: black;
 }
 #TestArea a:link, 
 #TestArea a:visited, 
@@ -231,4 +237,7 @@ div.Preferences {
     overflow: auto;
     background: none repeat scroll 0 0;
     background-color: rgba(157, 157, 157, 0.3);
+}
+.tooltip_style {
+    font-weight: bold;
 }
