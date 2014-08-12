@@ -70,6 +70,8 @@ a.ui_link, a.ui_link:link, a.ui_link:visited {
   font-size: .9em;
   color: #000;
   box-shadow: 5px 5px 5px #666;
+  border-radius: 1em;
+  margin-bottom: .5em;
 } 
 a.ui_link:hover, a.ui_link:active {
   background: darkblue;
@@ -78,6 +80,7 @@ a.ui_link:hover, a.ui_link:active {
   font-weight: bold;
   color: #fff;
   box-shadow: 5px 5px 5px #666;
+  border-radius: 1em;
 } 
 #container-left {
   width: 15%;
@@ -89,6 +92,7 @@ a.ui_link:hover, a.ui_link:active {
   float: left;
 }
 #logo {
+  border-radius: 1em;
 }
 
 #logo a:link, #logo a:visited {
@@ -107,6 +111,7 @@ a.ui_link:hover, a.ui_link:active {
 #infoTextArea {
   background: none repeat scroll 0 0 lightblue;
   padding-left: 1em;
+  margin-left: 1em;
   width: 90%;
   border-radius: 1em;
   box-shadow: 5px 5px 5px #666;
