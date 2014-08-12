@@ -235,7 +235,7 @@ div.Preferences {
 
 div.tooltip_style {
   position: absolute;
-  z-index: 10;
+  z-index: 11;
   visibility: hidden;
   color: white;
   padding: 4px;
