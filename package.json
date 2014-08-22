@@ -5,6 +5,5 @@
   "description": "Measurement Lab Test Suite Browser Plugin",
   "author": "",
   "license": "MPL 2.0",
-  "version": "0.1",
-  "preferences": []
+  "version": "0.1"
 }
